@@ -3,7 +3,7 @@ const paths = require('./paths');
 
 module.exports = {
   entry: {
-    orfdl: ['@/orfdl.js'],
+    'orfdl.user': ['@/orfdl.js'],
   },
 
   output: {
