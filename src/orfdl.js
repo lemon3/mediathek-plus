@@ -184,6 +184,7 @@ const contentClicked = (evt) => {
   const t = evt.target;
   if (currentActive) {
     currentActive.classList.remove('active');
+    currentActive.querySelector('.my-app-copy').style.display = 'none';
   }
 
   if (
@@ -193,8 +194,21 @@ const contentClicked = (evt) => {
   ) {
     const success = imageClicked(evt);
     if (success) {
-      t.classList.add('active');
-      currentActive = t;
+      const parent = t.parentElement;
+      const copy = parent.querySelector('.my-app-copy');
+      clearTimeout(to);
+      copy.style.display = 'block';
+      to = setTimeout(() => {
+        parent.classList.add('active');
+        parent.classList.add('success');
+        to = setTimeout(() => {
+          parent.classList.remove('success');
+          to = setTimeout(() => {
+            copy.style.display = 'none';
+          }, 200);
+        }, 500);
+      }, 1);
+      currentActive = parent;
     }
   } else if (
     'button' === t.nodeName.toLocaleLowerCase() &&
@@ -205,15 +219,14 @@ const contentClicked = (evt) => {
 };
 
 const imageClicked = (evt) => {
-  let ta = evt.target.nextSibling;
+  let ta = evt.target.parentElement.nextElementSibling;
   ta.select();
   if (navigator.clipboard) {
     let text = ta.innerHTML;
-    return navigator.clipboard.writeText(text)
-      .then(
-        () => console.log('successful'),
-        (err) => console.log('error', err),
-      );
+    return navigator.clipboard.writeText(text).then(
+      () => console.log('successful'),
+      (err) => console.log('error', err)
+    );
   }
 
   return document.execCommand('copy');
@@ -255,12 +268,27 @@ const renderSearchResults = (results) => {
       { class: 'my-app-ta', disabled: 'true' },
       { position: 'absolute', left: '-999em', opacity: 0 }
     );
+    const imgWrapper = createEl('div', {
+      class: 'my-app-imgWrap',
+    });
+    const copyInfo = createEl(
+      'div',
+      {
+        class: 'my-app-copy',
+      },
+      {
+        display: 'none',
+      }
+    );
+    copyInfo.innerHTML = 'copied';
     const img = createEl(
       'img',
       { src: obj.img, width: '150' },
       { flex: 'auto' }
     );
     img.dataset.drm = null === obj.drm ? false : obj.drm;
+    imgWrapper.append(img);
+    imgWrapper.append(copyInfo);
 
     let message;
     if (!obj.drm) {
@@ -286,7 +314,7 @@ const renderSearchResults = (results) => {
 
     textArea.innerHTML = message;
     result.append(bar);
-    result.append(img);
+    result.append(imgWrapper);
     result.append(textArea);
     fragment.append(result);
   }
@@ -421,10 +449,11 @@ const createApp = () => {
   contentDiv = createEl('div', { id: 'my-app-content' });
 
   bodyInfo = createEl('div', { class: 'my-app-info' });
+  bodyInfo.style.display = 'none';
   bodyInfo.innerHTML =
     'Click on the image to copy the video-link to the clipboard';
 
-  const footer = createEl('div', { id: 'my-app-footer', class: 'my-app-info' });
+  const footer = createEl('div', { id: 'my-app-footer' });
   footer.innerHTML = `v-${version}`;
 
   body.append(bodyInfo);

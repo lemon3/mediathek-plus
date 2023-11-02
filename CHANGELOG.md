@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.5.3
+### Added or Changed
+- small display bug fixed
+- added a „copy“ notification
+
 ## v0.5.2
 ### Added or Changed
 - added meta file for userscript

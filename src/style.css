@@ -4,7 +4,8 @@
   --color-3: #90a8c2;
   --color-4: #c9c9c9;
   --color-5: #222222;
-  --min-font: 12px;
+  --font-small: 12px;
+  --font-tiny: 10px;
 }
 
 #my-app {
@@ -17,12 +18,11 @@
 }
 
 #my-app .my-app-info {
-  font-size: var(--min-font);
+  font-size: var(--font-small);
 }
 
 #my-app-body .my-app-info {
-  padding-left: 15px;
-  padding-right: 15px;
+  padding: 15px;
 }
 
 #my-app-clear {
@@ -139,7 +139,7 @@
 #my-app .my-app-bar {
   width: 100%;
   flex: 1 1 100%;
-  font-size: var(--min-font);
+  font-size: var(--font-small);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -165,11 +165,38 @@
   touch-action: none;
 } */
 
-#my-app img.active {
+#my-app .my-app-copy {
+  font-size: 30px;
+}
+
+#my-app .my-app-imgWrap {
+  width: 100%;
+  display: flex;
+  position: relative;
+}
+
+#my-app .my-app-copy {
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  left: 0;
+  top: 35%;
+  background-color: rgba(0,0,0,0.4);
+  padding: 10px;
+  opacity: 0;
+  transition: opacity ease-out 0.2s;
+}
+
+#my-app .success .my-app-copy {
+  opacity: 1;
+}
+
+#my-app .active {
   box-shadow: 0 0 0 2px rgb(255, 255, 84);
   filter: brightness(1.2);
 }
 
 #my-app-footer {
+  font-size: var(--font-tiny);
   text-align: right;
 }
