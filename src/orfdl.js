@@ -1,10 +1,10 @@
 // import css from '!!css-loader!@/style.css';
 import css from '@/style.css';
-import { enableConsole, createEl, Storage } from '@/helper.js';
+import { createEl, Storage } from '@/helper.js';
 import pack from '../package.json';
 
-const cons = enableConsole();
-window.cons = cons;
+// const cons = enableConsole();
+// window.cons = cons;
 
 const version = pack.version;
 const lsName = 'dl-app'; // name for local storage
