@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5.4
+### Added or Changed
+- filtering update
+
 ## v0.5.3
 ### Added or Changed
 - small display bug fixed

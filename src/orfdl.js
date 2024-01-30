@@ -22,7 +22,7 @@ let to;
 let initialized;
 let clearBtnVisible;
 let dataObject = [];
-let oldSearchString = '';
+let oldSearchString;
 
 // elements
 let mainDiv;
@@ -164,9 +164,9 @@ const createDataObject = () => {
 
 const findData = (inp) => {
   // no filtering, show all
-  if ('' === inp) {
-    return dataObject;
-  }
+  // if ('' === inp) {
+  //   return dataObject;
+  // }
 
   const type = '*' === inp ? 'all' : 'single';
   const filtered = dataObject.filter(
@@ -359,7 +359,8 @@ const searchNow = (searchString) => {
   if (oldSearchString === searchString) {
     return;
   }
-  const searchdata = '' === searchString ? [] : findData(searchString);
+  // const searchdata = '' === searchString ? [] : findData(searchString);
+  const searchdata = findData(searchString);
 
   // todo: no update if nothing changed
   contentDiv.innerHTML = '';
@@ -403,9 +404,14 @@ const createApp = () => {
   const body = createEl('div', { id: 'my-app-body' });
 
   mainDiv = createEl('div', { id: 'my-app-box' });
+  bodyInfo = createEl('div', { class: 'my-app-info' });
+  bodyInfo.innerHTML =
+    'Click on the image to copy the video-link to the clipboard';
 
   // no filter option on a single video page
   if (!isSingleVideoPage) {
+    bodyInfo.style.display = 'none';
+
     const header = createEl('div', { id: 'my-app-header' });
     const info = createEl('div', { class: 'my-app-info' });
     info.innerHTML = `Number of Videos: ${numberOfVideos}`;
@@ -447,11 +453,6 @@ const createApp = () => {
   closeBtn = createEl('div', { id: 'my-app-close' });
   closeBtn.addEventListener('click', toggle);
   contentDiv = createEl('div', { id: 'my-app-content' });
-
-  bodyInfo = createEl('div', { class: 'my-app-info' });
-  bodyInfo.style.display = 'none';
-  bodyInfo.innerHTML =
-    'Click on the image to copy the video-link to the clipboard';
 
   const footer = createEl('div', { id: 'my-app-footer' });
   footer.innerHTML = `v-${version}`;
@@ -517,13 +518,14 @@ const init = () => {
     return;
   }
 
-  if ('' !== autosearch) {
-    sfield.value = autosearch;
-    sfield.dispatchEvent(new Event('input'));
-    searchNow(autosearch);
-  } else {
-    sfield.focus();
-  }
+  // if ('' !== autosearch) {
+  sfield.value = autosearch;
+  sfield.dispatchEvent(new Event('input'));
+  searchNow(autosearch);
+  // }
+  // else {
+  // }
+  sfield.focus();
 };
 
 init();
