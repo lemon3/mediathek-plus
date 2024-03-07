@@ -1,7 +1,7 @@
 {
   "name": "orfdl",
   "displayName": "ORF DL",
-  "version": "0.5.4",
+  "version": "0.5.5",
   "description": "orf tvthek video download helper",
   "main": "index.js",
   "author": "lemon3",

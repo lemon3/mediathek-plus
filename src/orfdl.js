@@ -64,7 +64,6 @@ const getDateFromString = (string) => {
 
 const createDataObject = () => {
   let output = [];
-
   let playerObject;
   let playlist;
 
@@ -403,7 +402,7 @@ const createApp = () => {
   const app = createEl('div', { id: 'my-app' });
   const body = createEl('div', { id: 'my-app-body' });
 
-  mainDiv = createEl('div', { id: 'my-app-box' });
+  mainDiv = createEl('div', { id: 'my-app-box' }, { display: 'none' });
   bodyInfo = createEl('div', { class: 'my-app-info' });
   bodyInfo.innerHTML =
     'Click on the image to copy the video-link to the clipboard';

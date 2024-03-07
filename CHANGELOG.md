@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5.5
+### Changed
+- this update fixes a small display bug
+
 ## v0.5.4
 ### Added or Changed
 - filtering update
