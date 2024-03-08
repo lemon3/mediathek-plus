@@ -634,4 +634,8 @@ const init = async () => {
   sfield.focus();
 };
 
-init();
+// helper
+const st = setTimeout(() => {
+  init();
+  clearTimeout(st);
+}, 10);
