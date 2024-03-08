@@ -1,6 +1,6 @@
 // import css from '!!css-loader!@/style.css';
 import css from '@/style.css';
-import { createEl, Storage, enableConsole } from '@/helper.js';
+import { createEl, Store, enableConsole } from '@/helper.js';
 import pack from '../package.json';
 
 const msg = {
@@ -8,6 +8,7 @@ const msg = {
 };
 
 const cs = enableConsole('cs');
+window.cs = cs;
 
 const version = pack.version;
 const lsName = 'dl-app'; // name for local storage
@@ -106,7 +107,6 @@ const createOrfOn = async () => {
   let playerObject;
   try {
     playerObject = await orfOnFetchJson();
-    cs.log(playerObject);
   } catch (error) {
     return false;
   }
@@ -114,47 +114,45 @@ const createOrfOn = async () => {
   window.playerObject = playerObject;
   const output = [];
 
-  let link = null;
-  // const d = new Date(playerObject.date);
-  // const date = `${d.getUTCFullYear()}-${d.getUTCMonth()+1}-${d.getUTCDate()}`;
+  const createOne = (obj, type = 'single') => {
+    let link = null;
+    let date = obj.date || obj.episode_date;
+    date = new Date(date);
+    // const d = new Date(obj.date);
+    // const date = `${d.getUTCFullYear()}-${d.getUTCMonth()+1}-${d.getUTCDate()}`;
 
-  // get best hls resource
-  playerObject.sources[delivery].forEach((media) => {
-    if ('qxa' === media.quality_key.toLocaleLowerCase()) {
-      link = media.src;
-    }
-  });
+    // get best hls resource
+    obj.sources[delivery].forEach((media) => {
+      if ('qxa' === media.quality_key.toLocaleLowerCase()) {
+        link = media.src;
+      }
+    });
 
-  const drm =
-    'undefined' !== typeof playerObject.is_drm_protected
-      ? playerObject.is_drm_protected
-      : null;
+    const drm =
+      'undefined' !== typeof obj.is_drm_protected
+        ? obj.is_drm_protected
+        : null;
 
-  let date;
+    return {
+      type,
+      title: obj.headline || obj.title,
+      drm,
+      date,
+      link,
+      img: obj.image.image.player.url,
+    };
+  };
 
-  // all
-  output.push({
-    type: 'all',
-    title: playerObject.headline || playerObject.title,
-    drm,
-    date: playerObject.date,
-    link,
-    img: playerObject.image.image.player.url,
-  });
+  const all = createOne(playerObject, 'all');
+  output.push(all);
 
-  date = new Date(playerObject.date);
-
-  // single
-  output.push({
-    type: 'single',
-    title: playerObject.headline || playerObject.title,
-    drm,
-    date,
-    link,
-    img: playerObject.image.image.player.url,
-  });
-
-  // TODO playerObject.segments
+  if (playerObject.segments) {
+    // single
+    playerObject.segments.forEach((s) => {
+      const segment = createOne(s);
+      output.push(segment);
+    });
+  }
 
   return output;
 };
@@ -258,9 +256,9 @@ const createOrfTvthek = () => {
   return output;
 };
 
-const createDataObject = (host) => {
+const createDataObject = async (host) => {
   if ('on.orf.at' === host) {
-    return createOrfOn();
+    return await createOrfOn();
   } else if ('tvthek.orf.at' === host) {
     return createOrfTvthek();
   }
@@ -437,6 +435,7 @@ const open = () => {
       sfield.focus();
     }
     isOpen = true;
+    cs.log(store, lsName, store.get(lsName));
     store.set(lsName, { open: isOpen });
     clearTimeout(to);
   }, 1);
@@ -590,7 +589,7 @@ const init = async () => {
   }
   window.orfdl_initialized = true;
 
-  store = new Storage();
+  store = new Store();
   let ls = store.get(lsName);
   if (ls) {
     if ('undefined' !== typeof ls.search) {
@@ -603,6 +602,8 @@ const init = async () => {
 
   const host = window.location.host;
   dataObject = await createDataObject(host);
+
+  window.dataObject = dataObject;
 
   // early exit nothing found
   if (!dataObject || !dataObject.length) {
@@ -634,8 +635,4 @@ const init = async () => {
   sfield.focus();
 };
 
-// helper
-const st = setTimeout(() => {
-  init();
-  clearTimeout(st);
-}, 10);
+setTimeout(init, 10);

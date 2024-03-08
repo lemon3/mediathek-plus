@@ -1,6 +1,8 @@
 [production staging]
->0.3%,
-defaults
+>5%
+last 2 versions
+Firefox ESR
+not ie < 11
 
 [development]
 last 1 chrome version

@@ -76,7 +76,7 @@ export const enableConsole = (name = 'cs', context = window) => {
   return (context[name] = cw);
 };
 
-export class Storage {
+export class Store {
   constructor() {}
 
   get(name, value) {
