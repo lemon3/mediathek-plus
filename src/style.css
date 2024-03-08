@@ -1,7 +1,7 @@
 #my-app {
   --color-1: #000;
   --color-2: #222;
-  --color-3: #90a8c2;
+  --color-3: #72bbe9;
   --color-4: #c9c9c9;
   --color-5: #222222;
   --font-small: 12px;
@@ -114,16 +114,21 @@
 }
 
 #my-app .my-app-shareBtn {
-  background-image: url(data:image/svg+xml;base64,PHN2ZyBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCAyNTYgMjU2IiB2aWV3Qm94PSIwIDAgMjU2IDI1NiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSIjMWQxZDFiIj48cGF0aCBkPSJtMjA0LjMgMjQyLjdoLTE1Mi42Yy00LjEgMC03LjUtMy40LTcuNS03LjV2LTEyOC4xYzAtNC4xIDMuNC03LjUgNy41LTcuNWg1MC4xYzQuMSAwIDcuNSAzLjQgNy41IDcuNXMtMy40IDcuNS03LjUgNy41aC00Mi42djExMy4yaDEzNy42di0xMTMuMmgtNDIuNmMtNC4xIDAtNy41LTMuNC03LjUtNy41czMuNC03LjUgNy41LTcuNWg1MC4xYzQuMSAwIDcuNSAzLjQgNy41IDcuNXYxMjguMmMwIDQuMS0zLjQgNy40LTcuNSA3LjR6Ii8+PHBhdGggZD0ibTEyOCAxNzguM2MtNC4xIDAtNy41LTMuNC03LjUtNy41di0xMzIuN2wtMzUuMiAzNS4yYy0yLjkgMi45LTcuNyAyLjktMTAuNiAwcy0yLjktNy43IDAtMTAuNmw0Ny45LTQ3LjljLjEtLjEuMy0uMy40LS40IDEuMi0xIDIuNi0xLjYgNC0xLjguNS0uMSAxLS4xIDEuNCAwIDEuNy4xIDMuNS44IDQuOCAyLjJsNDggNDhjMS41IDEuNSAyLjIgMy40IDIuMiA1LjNzLS43IDMuOC0yLjIgNS4zYy0yLjkgMi45LTcuNyAyLjktMTAuNiAwbC0zNS4yLTM1LjJ2MTMyLjdjLjEgNC0zLjMgNy40LTcuNCA3LjR6Ii8+PC9nPjwvc3ZnPg==);
+  background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCI+PHBhdGggZD0iTTE1Ljk4NCA1LjAxNmwtMS40MDYgMS40MDYtMS41OTQtMS41OTR2MTEuMTU2aC0xLjk2OVY0LjgyOEw5LjQyMSA2LjQyMiA4LjAxNSA1LjAxNiAxMS45OTkuOTg1em00LjAzMiA0Ljk2OFYyMXEwIC44NDQtLjU4NiAxLjQzdC0xLjQzLjU4Nkg2cS0uODQ0IDAtMS40My0uNTg2VDMuOTg0IDIxVjkuOTg0cTAtLjc5Ny41ODYtMS4zODNUNiA4LjAxNWgzdjEuOTY5SDZWMjFoMTJWOS45ODRoLTNWOC4wMTVoM3EuODQ0IDAgMS40My41ODZ0LjU4NiAxLjM4M3oiLz48L3N2Zz4=);
   width: 32px;
   height: 32px;
-  background-color: var(--color-3);
+  background-color: var(--color-3);;
   display: flex;
-  background-size: 80%;
+  background-size: 70%;
   background-repeat: no-repeat;
   background-position: center center;
   flex: none;
   border: none;
+}
+
+#my-app .my-app-shareBtn:hover {
+  background-color: var(--color-4);
+  cursor: pointer;
 }
 
 #my-app .my-app-result {

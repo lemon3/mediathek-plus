@@ -1,10 +1,13 @@
 // import css from '!!css-loader!@/style.css';
 import css from '@/style.css';
-import { createEl, Storage } from '@/helper.js';
+import { createEl, Storage, enableConsole } from '@/helper.js';
 import pack from '../package.json';
 
-// const cons = enableConsole();
-// window.cons = cons;
+const msg = {
+  btn: 'Click on the image to copy the video-link to the clipboard',
+};
+
+const cs = enableConsole('cs');
 
 const version = pack.version;
 const lsName = 'dl-app'; // name for local storage
@@ -19,7 +22,6 @@ let delivery = 'hls';
 const styleText = css.toString(); //.replace(/\s+/g, ' ');
 let to;
 
-let initialized;
 let clearBtnVisible;
 let dataObject = [];
 let oldSearchString;
@@ -62,7 +64,102 @@ const getDateFromString = (string) => {
   return new Date(`${y}-${m}-${d} ${time}`);
 };
 
-const createDataObject = () => {
+const orfOnCleanUp = (obj) => {
+  obj.advertising_mapping = {};
+  obj.advertising_query_string = '';
+  obj.adition_advertising_query_string = '';
+  obj.show_display_ads = false;
+  obj.show_instream_ads = false;
+  obj.disable_display_ads_orf_platforms = true;
+  obj.disable_instream_ads_orf_platforms = true;
+};
+
+const orfOnFetchJson = () => {
+  let count = 0;
+  return new Promise((resolve, reject) => {
+    const get = () => {
+      count++;
+      const tmp = window.__NUXT__.data;
+      const data = Object.values(tmp);
+      let playerObject;
+      data.forEach((d) => {
+        if (d.sources) {
+          playerObject = d;
+          orfOnCleanUp(d);
+          return;
+        }
+      });
+      if (playerObject) {
+        resolve(playerObject);
+      } else {
+        if (count > 20) {
+          reject();
+        }
+        setTimeout(() => get(), 100);
+      }
+    };
+    get();
+  });
+};
+
+const createOrfOn = async () => {
+  let playerObject;
+  try {
+    playerObject = await orfOnFetchJson();
+    cs.log(playerObject);
+  } catch (error) {
+    return false;
+  }
+
+  window.playerObject = playerObject;
+  const output = [];
+
+  let link = null;
+  // const d = new Date(playerObject.date);
+  // const date = `${d.getUTCFullYear()}-${d.getUTCMonth()+1}-${d.getUTCDate()}`;
+
+  // get best hls resource
+  playerObject.sources[delivery].forEach((media) => {
+    if ('qxa' === media.quality_key.toLocaleLowerCase()) {
+      link = media.src;
+    }
+  });
+
+  const drm =
+    'undefined' !== typeof playerObject.is_drm_protected
+      ? playerObject.is_drm_protected
+      : null;
+
+  let date;
+
+  // all
+  output.push({
+    type: 'all',
+    title: playerObject.headline || playerObject.title,
+    drm,
+    date: playerObject.date,
+    link,
+    img: playerObject.image.image.player.url,
+  });
+
+  date = new Date(playerObject.date);
+
+  // single
+  output.push({
+    type: 'single',
+    title: playerObject.headline || playerObject.title,
+    drm,
+    date,
+    link,
+    img: playerObject.image.image.player.url,
+  });
+
+  // TODO playerObject.segments
+
+  return output;
+};
+
+const createOrfTvthek = () => {
   let output = [];
   let playerObject;
   let playlist;
@@ -159,6 +256,14 @@ const createDataObject = () => {
   });
 
   return output;
+};
+
+const createDataObject = (host) => {
+  if ('on.orf.at' === host) {
+    return createOrfOn();
+  } else if ('tvthek.orf.at' === host) {
+    return createOrfTvthek();
+  }
 };
 
 const findData = (inp) => {
@@ -269,6 +374,7 @@ const renderSearchResults = (results) => {
     );
     const imgWrapper = createEl('div', {
       class: 'my-app-imgWrap',
+      title: msg.btn,
     });
     const copyInfo = createEl(
       'div',
@@ -307,6 +413,7 @@ const renderSearchResults = (results) => {
       const shareButton = createEl('button', { class: 'my-app-shareBtn' });
       shareButton.dataset.share = true;
       shareButton.dataset.shareurl = obj.link;
+      shareButton.title = 'share video link';
 
       bar.append(shareButton);
     }
@@ -404,8 +511,7 @@ const createApp = () => {
 
   mainDiv = createEl('div', { id: 'my-app-box' }, { display: 'none' });
   bodyInfo = createEl('div', { class: 'my-app-info' });
-  bodyInfo.innerHTML =
-    'Click on the image to copy the video-link to the clipboard';
+  bodyInfo.innerHTML = msg.btn;
 
   // no filter option on a single video page
   if (!isSingleVideoPage) {
@@ -478,10 +584,11 @@ const createApp = () => {
  * init function
  * @return {void} nothing returned
  */
-const init = () => {
-  if (initialized) {
+const init = async () => {
+  if (window.orfdl_initialized) {
     return false;
   }
+  window.orfdl_initialized = true;
 
   store = new Storage();
   let ls = store.get(lsName);
@@ -494,11 +601,11 @@ const init = () => {
     }
   }
 
-  initialized = true;
-  dataObject = createDataObject();
+  const host = window.location.host;
+  dataObject = await createDataObject(host);
 
   // early exit nothing found
-  if (!dataObject.length) {
+  if (!dataObject || !dataObject.length) {
     return;
   }
 

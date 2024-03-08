@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5.6
+### Added or Changed
+- support for orf on (beta)
+
 ## v0.5.5
 ### Changed
 - this update fixes a small display bug

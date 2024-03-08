@@ -67,12 +67,13 @@ export const addProps = (el, properties, style) => {
 export const createEl = (el, properties, style) =>
   addProps(document.createElement(el), properties, style);
 
-export const enableConsole = () => {
+export const enableConsole = (name = 'cs', context = window) => {
   var theFrame = document.createElement('iframe');
   theFrame.src = 'about:blank';
   theFrame.style.display = 'none';
   document.body.appendChild(theFrame);
-  return theFrame.contentWindow.console;
+  const cw = theFrame.contentWindow.console;
+  return (context[name] = cw);
 };
 
 export class Storage {
