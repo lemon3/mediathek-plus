@@ -3,12 +3,22 @@ import css from '@/style.css';
 import { createEl, Store, enableConsole } from '@/helper.js';
 import pack from '../package.json';
 
+const cs = enableConsole('cs');
+window.cs = cs;
+
+let oldHref = document.location.href;
+const body = document.querySelector('body');
+const observer = new MutationObserver(() => {
+  if (oldHref !== document.location.href) {
+    oldHref = document.location.href;
+    reinit();
+  }
+});
+observer.observe(body, { childList: true, subtree: true });
+
 const msg = {
   btn: 'Click on the image to copy the video-link to the clipboard',
 };
-
-const cs = enableConsole('cs');
-window.cs = cs;
 
 const version = pack.version;
 const lsName = 'dl-app'; // name for local storage
@@ -37,15 +47,7 @@ let clearBtn;
 
 let currentActive;
 
-const getSource = (sources) => {
-  const filtered = sources.filter(
-    (source) => source.quality === quality && source.delivery === delivery
-  );
-  if (0 === filtered.length) {
-    return null;
-  }
-  return filtered[0].src;
-};
+let currentKey;
 
 const getDateFromString = (string) => {
   if (!string) {
@@ -75,42 +77,43 @@ const orfOnCleanUp = (obj) => {
   obj.disable_instream_ads_orf_platforms = true;
 };
 
-const orfOnFetchJson = () => {
+const orfOnFetchData = async () => {
   let count = 0;
+  let to;
   return new Promise((resolve, reject) => {
     const get = () => {
       count++;
       const tmp = window.__NUXT__.data;
-      const data = Object.values(tmp);
+
+      const data = Object.entries(tmp);
       let playerObject;
-      data.forEach((d) => {
-        if (d.sources) {
-          playerObject = d;
-          orfOnCleanUp(d);
+      data.forEach((entry) => {
+        const [key, obj] = entry;
+        if (obj.sources) {
+          playerObject = obj;
+          orfOnCleanUp(obj);
+          currentKey = key;
           return;
         }
       });
+
       if (playerObject) {
+        count = 0;
         resolve(playerObject);
       } else {
         if (count > 20) {
-          reject();
+          clearTimeout(to);
+          to = null;
+          return reject();
         }
-        setTimeout(() => get(), 100);
+        to = setTimeout(() => get(), 150);
       }
     };
     get();
   });
 };
 
-const createOrfOn = async () => {
-  let playerObject;
-  try {
-    playerObject = await orfOnFetchJson();
-  } catch (error) {
-    return false;
-  }
-
+const createOrfOn = (playerObject) => {
   window.playerObject = playerObject;
   const output = [];
 
@@ -129,18 +132,20 @@ const createOrfOn = async () => {
     });
 
     const drm =
-      'undefined' !== typeof obj.is_drm_protected
-        ? obj.is_drm_protected
-        : null;
+      'undefined' !== typeof obj.is_drm_protected ? obj.is_drm_protected : null;
 
-    return {
+    const ret = {
       type,
       title: obj.headline || obj.title,
       drm,
       date,
       link,
-      img: obj.image.image.player.url,
+      img:
+        obj.image && obj.image.image && obj.image.image.player
+          ? obj.image.image.player.url || null
+          : null,
     };
+    return ret;
   };
 
   const all = createOne(playerObject, 'all');
@@ -161,6 +166,16 @@ const createOrfTvthek = () => {
   let output = [];
   let playerObject;
   let playlist;
+
+  const getSource = (sources) => {
+    const filtered = sources.filter(
+      (source) => source.quality === quality && source.delivery === delivery
+    );
+    if (0 === filtered.length) {
+      return null;
+    }
+    return filtered[0].src;
+  };
 
   if (
     window.jsb &&
@@ -258,7 +273,16 @@ const createOrfTvthek = () => {
 
 const createDataObject = async (host) => {
   if ('on.orf.at' === host) {
-    return await createOrfOn();
+    let playerObject;
+    try {
+      // playerObject = await datafetched();
+      playerObject = await orfOnFetchData();
+    } catch (error) {
+      return false;
+    }
+    const result = createOrfOn(playerObject);
+    return result;
+    // return await createOrfOn();
   } else if ('tvthek.orf.at' === host) {
     return createOrfTvthek();
   }
@@ -435,7 +459,6 @@ const open = () => {
       sfield.focus();
     }
     isOpen = true;
-    cs.log(store, lsName, store.get(lsName));
     store.set(lsName, { open: isOpen });
     clearTimeout(to);
   }, 1);
@@ -579,11 +602,30 @@ const createApp = () => {
   app.addEventListener('click', contentClicked);
 };
 
+const reinit = () => {
+  // cs.log(currentKey);
+  if (window.__NUXT__.data && window.__NUXT__.data[currentKey]) {
+    delete window.__NUXT__.data[currentKey];
+  }
+  // cs.log(window.__NUXT__.data);
+
+  // Object.entries(window.__NUXT__.data).forEach((entry) => {
+  //   const [key, obj] = entry;
+  //   delete window.__NUXT__.data[key];
+  // });
+
+  currentKey = null;
+  autosearch = oldSearchString;
+  oldSearchString = null;
+  window.orfdl_initialized = false;
+  init(false);
+};
+
 /**
  * init function
  * @return {void} nothing returned
  */
-const init = async () => {
+const init = async (createGui = true) => {
   if (window.orfdl_initialized) {
     return false;
   }
@@ -602,6 +644,7 @@ const init = async () => {
 
   const host = window.location.host;
   dataObject = await createDataObject(host);
+  // cs.log(dataObject);
 
   window.dataObject = dataObject;
 
@@ -610,7 +653,9 @@ const init = async () => {
     return;
   }
 
-  createApp();
+  if (createGui) {
+    createApp();
+  }
 
   if (isOpen) {
     mainDiv.classList.add('open');

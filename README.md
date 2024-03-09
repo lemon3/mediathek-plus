@@ -52,7 +52,7 @@ you need to extend safari ([what are extension?](https://support.apple.com/en-gb
 **step-by-step guide:**
 1) download [userscripts](https://apps.apple.com/us/app/userscripts/id1463298887) extension form the App Store.
 2) in the userscripts app set the location, where you would like to store your userscripts.
-3) now download this [script](https://github.com/lemon3/orfdl/blob/main/dist/orfdl.user.js) and save it to your recently defined userscripts directory.
+3) now download this [script](https://raw.githubusercontent.com/lemon3/orfdl/main/dist/orfdl.user.js) and save it to your recently defined userscripts directory.
 4) download [a-shell-mini](https://apps.apple.com/at/app/a-shell-mini/id1543537943) or [a-shell](https://apps.apple.com/at/app/a-shell/id1473805438) (this app is needed to download the videos).
 5) go to the **orf tvtheke** and look for a video. An additional menu will appear at the top left, with the help of which you can copy the video link to the clipboard or filter the videos if the show/broadcast has multiple files/segments.
 6) just paste this video-link into „a-shell“ or „a-shell mini“, and the file will be downloaded.
