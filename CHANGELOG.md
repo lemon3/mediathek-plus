@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5.8
+### Added or Changed
+- css fixes
+
 ## v0.5.7
 ### Added or Changed
 - bug fixes

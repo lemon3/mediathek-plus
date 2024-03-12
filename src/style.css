@@ -104,7 +104,6 @@
   transform: translateX(-100%);
   position: relative;
   transition: transform 0.1s ease-out;
-  /* box-shadow: 0 8px 15px -6px rgba(255, 255, 255, 0.3); */
   border: 1px solid var(--color-5);
 }
 
@@ -117,7 +116,7 @@
   background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCI+PHBhdGggZD0iTTE1Ljk4NCA1LjAxNmwtMS40MDYgMS40MDYtMS41OTQtMS41OTR2MTEuMTU2aC0xLjk2OVY0LjgyOEw5LjQyMSA2LjQyMiA4LjAxNSA1LjAxNiAxMS45OTkuOTg1em00LjAzMiA0Ljk2OFYyMXEwIC44NDQtLjU4NiAxLjQzdC0xLjQzLjU4Nkg2cS0uODQ0IDAtMS40My0uNTg2VDMuOTg0IDIxVjkuOTg0cTAtLjc5Ny41ODYtMS4zODNUNiA4LjAxNWgzdjEuOTY5SDZWMjFoMTJWOS45ODRoLTNWOC4wMTVoM3EuODQ0IDAgMS40My41ODZ0LjU4NiAxLjM4M3oiLz48L3N2Zz4=);
   width: 32px;
   height: 32px;
-  background-color: var(--color-3);;
+  background-color: var(--color-3);
   display: flex;
   background-size: 70%;
   background-repeat: no-repeat;
@@ -156,19 +155,6 @@
   padding: 0.5em 0.5em 0.5em 0;
   line-height: 1.4em;
 }
-
-/* textarea */
-/* #my-app .my-app-ta {
-  border: none;
-  border-radius: 0;
-  padding: 0.5em;
-  font-size: 12px;
-  line-height: 1.1em;
-  box-sizing: border-box;
-  flex: 0 1 40% !important;
-  resize: none;
-  touch-action: none;
-} */
 
 #my-app .my-app-copy {
   font-size: 30px;
