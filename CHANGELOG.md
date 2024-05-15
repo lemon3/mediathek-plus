@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.6.0
+### Added or Changed
+- moved to pnpm
+- breadcrumb menu can be dragged
+
 ## v0.5.8
 ### Added or Changed
 - css fixes
@@ -34,7 +39,7 @@
 ### Added or Changed
 - add an icon
 
-## v0.5.0
+## v0.5.1
 ### Added or Changed
 - small bug fixing
 

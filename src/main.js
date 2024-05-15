@@ -1,7 +1,7 @@
 // import css from '!!css-loader!@/style.css';
-import css from '@/style.css';
-import { createEl, Store, enableConsole } from '@/helper.js';
-import pack from '../package.json';
+import css from './style.css?inline'; // assert { type: "css" };
+import { passiveIfSupported, createEl, Store, enableConsole } from '@/tools.js';
+import pack from '../package.json' assert { type: 'json' };
 
 const cs = enableConsole('cs');
 window.cs = cs;
@@ -11,7 +11,7 @@ const body = document.querySelector('body');
 const observer = new MutationObserver(() => {
   if (oldHref !== document.location.href) {
     oldHref = document.location.href;
-    reinit();
+    reInit();
   }
 });
 observer.observe(body, { childList: true, subtree: true });
@@ -23,8 +23,9 @@ const msg = {
 const version = pack.version;
 const lsName = 'dl-app'; // name for local storage
 
+let isTouch;
 let isOpen = true;
-let autosearch = '';
+let autoSearch = '';
 let store;
 
 let quality = 'Q8C';
@@ -41,7 +42,7 @@ let oldSearchString;
 let mainDiv;
 let contentDiv;
 let bodyInfo;
-let sfield;
+let searchField;
 let closeBtn;
 let clearBtn;
 
@@ -275,9 +276,10 @@ const createDataObject = async (host) => {
   if ('on.orf.at' === host) {
     let playerObject;
     try {
-      // playerObject = await datafetched();
+      // playerObject = await dataFetched();
       playerObject = await orfOnFetchData();
     } catch (error) {
+      console.log(error);
       return false;
     }
     const result = createOrfOn(playerObject);
@@ -363,8 +365,8 @@ const shareButtonClicked = (evt) => {
     return false;
   }
   const t = evt.target;
-  const title = t.dataset.sharetitle;
-  const url = t.dataset.shareurl;
+  const title = t.dataset.shareTitle;
+  const url = t.dataset.shareUrl;
 
   navigator
     .share({
@@ -434,7 +436,7 @@ const renderSearchResults = (results) => {
 
       const shareButton = createEl('button', { class: 'my-app-shareBtn' });
       shareButton.dataset.share = true;
-      shareButton.dataset.shareurl = obj.link;
+      shareButton.dataset.shareUrl = obj.link;
       shareButton.title = 'share video link';
 
       bar.append(shareButton);
@@ -455,8 +457,8 @@ const open = () => {
   to = setTimeout(() => {
     mainDiv.classList.add('open');
     closeBtn.classList.add('open');
-    if (sfield) {
-      sfield.focus();
+    if (searchField) {
+      searchField.focus();
     }
     isOpen = true;
     store.set(lsName, { open: isOpen });
@@ -487,23 +489,23 @@ const searchNow = (searchString) => {
   if (oldSearchString === searchString) {
     return;
   }
-  // const searchdata = '' === searchString ? [] : findData(searchString);
-  const searchdata = findData(searchString);
+  // const searchData = '' === searchString ? [] : findData(searchString);
+  const searchData = findData(searchString);
 
   // todo: no update if nothing changed
   contentDiv.innerHTML = '';
-  bodyInfo.style.display = searchdata.length ? 'block' : 'none';
+  bodyInfo.style.display = searchData.length ? 'block' : 'none';
 
-  renderSearchResults(searchdata);
+  renderSearchResults(searchData);
 
   store.set(lsName, { search: searchString });
   oldSearchString = searchString;
 };
 
 const clear = () => {
-  sfield.value = '';
-  sfield.dispatchEvent(new Event('input'));
-  sfield.focus();
+  searchField.value = '';
+  searchField.dispatchEvent(new Event('input'));
+  searchField.focus();
 };
 
 const toggleClearBtn = (hide) => {
@@ -522,6 +524,57 @@ const onInput = (evt) => {
   const val = evt.currentTarget.value;
   searchNow(val);
   toggleClearBtn('' === val);
+};
+
+const getPos = (evt) => {
+  let t;
+  if ('undefined' !== typeof evt.pageX) {
+    t = evt;
+  } else {
+    t = evt.touches[0] || evt.changedTouches[0];
+  }
+  return {
+    x: t.pageX,
+    y: t.pageY,
+  };
+};
+
+const dragStart = (evt) => {
+  evt.stopPropagation();
+  evt.preventDefault();
+  if ('touchstart' === evt.type) {
+    isTouch = true;
+    closeBtn.removeEventListener('mousedown', dragStart);
+    window.addEventListener('touchmove', drag, passiveIfSupported);
+    window.addEventListener('touchend', dragEnd, false);
+  } else if ('mousedown' === evt.type) {
+    isTouch = false;
+    closeBtn.removeEventListener('touchstart', dragStart);
+    window.addEventListener('mousemove', drag, false);
+    window.addEventListener('mouseup', dragEnd, false);
+  }
+};
+
+const drag = (evt) => {
+  evt.preventDefault();
+  let { x, y } = getPos(evt);
+  x = Math.max(0, x);
+  y = Math.max(0, y);
+
+  closeBtn.style.left = x + 'px';
+  closeBtn.style.top = y + 'px';
+};
+
+const dragEnd = (evt) => {
+  if ('touchend' === evt.type) {
+    isTouch = true;
+    window.removeEventListener('touchmove', drag, passiveIfSupported);
+    window.removeEventListener('touchend', dragEnd);
+  } else if ('mouseup' === evt.type) {
+    isTouch = false;
+    window.removeEventListener('mousemove', drag, false);
+    window.removeEventListener('mouseup', dragEnd, false);
+  }
 };
 
 const createApp = () => {
@@ -546,7 +599,7 @@ const createApp = () => {
 
     const filterElement = createEl('div', { id: 'my-app-filter' });
 
-    sfield = createEl('input', {
+    searchField = createEl('input', {
       type: 'text',
       id: 'my-app-field',
       name: 'fake_user[name]',
@@ -565,20 +618,26 @@ const createApp = () => {
     clearBtn.innerHTML = 'X';
     toggleClearBtn(true);
 
-    filterElement.append(sfield);
+    filterElement.append(searchField);
     filterElement.append(clearBtn);
 
     header.append(filterElement);
     header.append(hint);
 
     clearBtn.addEventListener('click', clear, false);
-    sfield.addEventListener('input', onInput, false);
+    searchField.addEventListener('input', onInput, false);
 
     mainDiv.append(header);
   }
 
   closeBtn = createEl('div', { id: 'my-app-close' });
+
   closeBtn.addEventListener('click', toggle);
+  // closeBtn.addEventListener('touchstart', move);
+
+  closeBtn.addEventListener('mousedown', dragStart);
+  closeBtn.addEventListener('touchstart', dragStart, passiveIfSupported);
+
   contentDiv = createEl('div', { id: 'my-app-content' });
 
   const footer = createEl('div', { id: 'my-app-footer' });
@@ -602,7 +661,7 @@ const createApp = () => {
   app.addEventListener('click', contentClicked);
 };
 
-const reinit = () => {
+const reInit = () => {
   // cs.log(currentKey);
   if (window.__NUXT__.data && window.__NUXT__.data[currentKey]) {
     delete window.__NUXT__.data[currentKey];
@@ -615,7 +674,7 @@ const reinit = () => {
   // });
 
   currentKey = null;
-  autosearch = oldSearchString;
+  autoSearch = oldSearchString;
   oldSearchString = null;
   window.orfdl_initialized = false;
   init(false);
@@ -635,7 +694,7 @@ const init = async (createGui = true) => {
   let ls = store.get(lsName);
   if (ls) {
     if ('undefined' !== typeof ls.search) {
-      autosearch = ls.search;
+      autoSearch = ls.search;
     }
     if ('undefined' !== typeof ls.open) {
       isOpen = ls.open;
@@ -670,14 +729,14 @@ const init = async (createGui = true) => {
     return;
   }
 
-  // if ('' !== autosearch) {
-  sfield.value = autosearch;
-  sfield.dispatchEvent(new Event('input'));
-  searchNow(autosearch);
+  // if ('' !== autoSearch) {
+  searchField.value = autoSearch;
+  searchField.dispatchEvent(new Event('input'));
+  searchNow(autoSearch);
   // }
   // else {
   // }
-  sfield.focus();
+  searchField.focus();
 };
 
 setTimeout(init, 10);

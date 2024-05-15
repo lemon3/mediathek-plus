@@ -1,7 +1,0 @@
-!.*
-dist
-_notes
-node_modules
-coverage/**/*.*
-*.config.js
-.*.js

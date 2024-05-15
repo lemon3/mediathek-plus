@@ -1,37 +1,28 @@
 {
   "name": "orfdl",
   "displayName": "ORF DL",
-  "version": "0.5.8",
+  "version": "0.6.0",
+  "type": "module",
   "description": "orf tvthek video download helper",
   "main": "index.js",
   "author": "lemon3",
   "license": "MIT",
   "scripts": {
-    "start": "webpack serve --config config/webpack.dev.js",
-    "build": "webpack --config config/webpack.prod.js",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
     "lint": "eslint 'src/**/*.js' || true",
     "prettify": "prettier --write 'src/**/*.*'",
-    "dev": "webpack --mode development --watch --config config/webpack.dev.js",
     "browserslistupdate": "npx update-browserslist-db@latest"
   },
   "devDependencies": {
-    "@babel/cli": "^7.23.0",
-    "@babel/core": "^7.23.2",
-    "@babel/preset-env": "^7.23.2",
-    "autoprefixer": "^10.4.16",
-    "babel-loader": "^9.1.3",
-    "css-loader": "^6.8.1",
-    "eslint": "^8.52.0",
-    "postcss": "^8.4.31",
-    "postcss-loader": "^8.1.0",
-    "prettier": "^3.0.3",
-    "string-replace-loader": "^3.1.0",
-    "svg-inline-loader": "^0.8.2",
-    "terser-webpack-plugin": "^5.3.9",
-    "webpack": "^5.89.0",
-    "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^5.0.1",
-    "webpack-merge": "^5.10.0"
+    "eslint": "^9.2.0",
+    "prettier": "^3.2.5",
+    "vite": "^5.2.11",
+    "vite-plugin-banner": "^0.7.1",
+    "vite-plugin-string-replace": "^1.1.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "globals": "^15.2.0"
+  }
 }

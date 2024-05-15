@@ -99,3 +99,20 @@ export class Store {
     localStorage.setItem(name, str);
   }
 }
+
+export let passiveIfSupported = false;
+try {
+  window.addEventListener(
+    'test',
+    null,
+    Object.defineProperty({}, 'passive', {
+      get: function () {
+        passiveIfSupported = { passive: false };
+        return false;
+      },
+    })
+  );
+  // eslint-disable-next-line no-unused-vars
+} catch (e) {
+  passiveIfSupported = false;
+}

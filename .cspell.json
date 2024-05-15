@@ -1,0 +1,17 @@
+{
+  "ignorePaths": [
+    "**/vite.config.ts",
+    "package.json",
+    "eslint.config.js"
+  ],
+  "words": [
+    "adition",
+    "gapless",
+    "iife",
+    "instream",
+    "NUXT",
+    "orfdl",
+    "Tvthek",
+    "userscript"
+  ]
+}
