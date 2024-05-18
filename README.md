@@ -34,8 +34,8 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-A small helper to get the link for a given video from the orf tvtheke.
-Usefull to download videos on the run (mobile device).
+A small helper to get the link for a given video from tvthek.orf.at or from on.orf.at.
+Useful to download videos on the run (mobile device).
 
 (btw.: this script doesn't download files, it's just a helper for fetching links).
 
@@ -53,9 +53,11 @@ you need to extend safari ([what are extension?](https://support.apple.com/en-gb
 1) download [userscripts](https://apps.apple.com/us/app/userscripts/id1463298887) extension form the App Store.
 2) in the userscripts app set the location, where you would like to store your userscripts.
 3) now download this [script](https://raw.githubusercontent.com/lemon3/orfdl/main/dist/orfdl.user.js) and save it to your recently defined userscripts directory.
-4) download [a-shell-mini](https://apps.apple.com/at/app/a-shell-mini/id1543537943) or [a-shell](https://apps.apple.com/at/app/a-shell/id1473805438) (this app is needed to download the videos).
-5) go to the **orf tvtheke** and look for a video. An additional menu will appear at the top left, with the help of which you can copy the video link to the clipboard or filter the videos if the show/broadcast has multiple files/segments.
-6) just paste this video-link into „a-shell“ or „a-shell mini“, and the file will be downloaded.
+
+**if you want to download:**
+1) download [a-shell-mini](https://apps.apple.com/at/app/a-shell-mini/id1543537943) or [a-shell](https://apps.apple.com/at/app/a-shell/id1473805438) (this app is needed to download the videos).
+2) go to the **orf tvtheke** site and look for a video. An additional menu will appear at the top left, with the help of which you can copy the video link to the clipboard or filter the videos if the show/broadcast has multiple files/segments.
+3) just paste this video-link into „a-shell“ or „a-shell mini“, and the file will be downloaded.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -67,7 +69,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 <!-- CONTACT -->
 ## Contact
-Wolfgang Jungmayer - lemon3.at
+wolfgang - lemon3.at
 
 Project Link: [https://github.com/lemon3/orfdl](https://github.com/lemon3/orfdl)
 <p align="right">(<a href="#readme-top">back to top</a>)</p>

@@ -1,3 +1,9 @@
+body.dragging > * {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
 #my-app {
   --color-1: #000;
   --color-2: #222;
@@ -44,6 +50,9 @@
   width: 100%;
   padding: 15px;
 }
+#my-app-header.hidden {
+  display: none;
+}
 
 #my-app-filter {
   display: flex;
@@ -72,6 +81,7 @@
   background-position: center center;
   box-shadow: 0 2px 12px -3px rgba(255, 255, 255, 0.8);
   cursor: pointer;
+  user-select: none;
 }
 
 #my-app-close.open {

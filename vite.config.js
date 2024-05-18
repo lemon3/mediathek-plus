@@ -7,7 +7,7 @@ import StringReplace from 'vite-plugin-string-replace';
 import banner from 'vite-plugin-banner';
 import { userScriptHeader } from './config/userScriptHeader.js';
 
-import Writer from './config/WriterPlugin.js';
+import Writer from 'vite-plugin-create-file';
 
 const search = 'my-app';
 const replace = 'l3-' + ('' + Math.random()).slice(2, 6);
@@ -17,7 +17,7 @@ export default defineConfig({
     target: 'es2015', // esnext
     rollupOptions: {
       input: {
-        main: '@/main.js',
+        main: '@/index.js',
       },
       output: {
         format: 'iife',
@@ -52,6 +52,12 @@ export default defineConfig({
         replace,
       },
     ]),
-    Writer(userScriptHeader, pkg.name + '.meta.js'),
+    Writer([
+      {
+        outDir: './dist',
+        content: userScriptHeader,
+        filename: pkg.name + '.meta.js', // required
+      },
+    ]),
   ],
 });

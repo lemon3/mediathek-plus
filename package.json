@@ -1,7 +1,7 @@
 {
   "name": "orfdl",
   "displayName": "ORF DL",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "type": "module",
   "description": "orf tvthek video download helper",
   "main": "index.js",
@@ -16,10 +16,11 @@
     "browserslistupdate": "npx update-browserslist-db@latest"
   },
   "devDependencies": {
-    "eslint": "^9.2.0",
+    "eslint": "^9.3.0",
     "prettier": "^3.2.5",
     "vite": "^5.2.11",
     "vite-plugin-banner": "^0.7.1",
+    "vite-plugin-create-file": "^0.1.0",
     "vite-plugin-string-replace": "^1.1.2"
   },
   "dependencies": {

@@ -6,6 +6,33 @@
 export const isFunction = (fun) => !!fun && 'function' === typeof fun;
 
 /**
+ *
+ * @param {mixed} value the value to restrict
+ * @param {Number} min the minimal value
+ * @param {Number} max the maximal value
+ * @returns
+ */
+export const restrict = (value, min, max) => {
+  value = parseFloat(value, 10);
+  min = parseFloat(min, 10);
+  max = parseFloat(max, 10);
+
+  if (max < min) {
+    let tmp = max;
+    max = min;
+    min = tmp;
+  }
+  if (!isNaN(min) && value < min) {
+    return min;
+  }
+  if (!isNaN(max) && value > max) {
+    return max;
+  }
+
+  return value;
+};
+
+/**
  * wrap a given HTML object with another
  * @param  {object} el - HTML object to wrap
  * @param  {object} wrapper - HTML object that should wrap the el

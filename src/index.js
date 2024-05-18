@@ -1,6 +1,13 @@
-// import css from '!!css-loader!@/style.css';
-import css from './style.css?inline'; // assert { type: "css" };
-import { passiveIfSupported, createEl, Store, enableConsole } from '@/tools.js';
+/* global assert */
+
+import css from './style.css?inline';
+import {
+  passiveIfSupported,
+  createEl,
+  Store,
+  enableConsole,
+  restrict,
+} from '@/tools.js';
 import pack from '../package.json' assert { type: 'json' };
 
 const cs = enableConsole('cs');
@@ -45,10 +52,14 @@ let bodyInfo;
 let searchField;
 let closeBtn;
 let clearBtn;
+let header;
+let info;
 
 let currentActive;
-
 let currentKey;
+let windowWidth;
+let windowHeight;
+let moved;
 
 const getDateFromString = (string) => {
   if (!string) {
@@ -291,6 +302,9 @@ const createDataObject = async (host) => {
 };
 
 const findData = (inp) => {
+  if (!dataObject) {
+    return null;
+  }
   // no filtering, show all
   // if ('' === inp) {
   //   return dataObject;
@@ -478,6 +492,9 @@ const close = () => {
 };
 
 const toggle = () => {
+  if (moved) {
+    return false;
+  }
   if (isOpen) {
     close();
   } else {
@@ -491,6 +508,9 @@ const searchNow = (searchString) => {
   }
   // const searchData = '' === searchString ? [] : findData(searchString);
   const searchData = findData(searchString);
+  if (!searchData) {
+    return;
+  }
 
   // todo: no update if nothing changed
   contentDiv.innerHTML = '';
@@ -528,20 +548,21 @@ const onInput = (evt) => {
 
 const getPos = (evt) => {
   let t;
-  if ('undefined' !== typeof evt.pageX) {
+  if ('undefined' !== typeof evt.clientX) {
     t = evt;
   } else {
     t = evt.touches[0] || evt.changedTouches[0];
   }
   return {
-    x: t.pageX,
-    y: t.pageY,
+    x: t.clientX,
+    y: t.clientY,
   };
 };
 
 const dragStart = (evt) => {
+  moved = false;
+  document.body.classList.add('dragging');
   evt.stopPropagation();
-  evt.preventDefault();
   if ('touchstart' === evt.type) {
     isTouch = true;
     closeBtn.removeEventListener('mousedown', dragStart);
@@ -558,8 +579,13 @@ const dragStart = (evt) => {
 const drag = (evt) => {
   evt.preventDefault();
   let { x, y } = getPos(evt);
-  x = Math.max(0, x);
-  y = Math.max(0, y);
+  moved = true;
+
+  x -= 19;
+  y -= 19;
+
+  x = restrict(x, 0, windowWidth - 38);
+  y = restrict(y, 0, windowHeight - 38);
 
   closeBtn.style.left = x + 'px';
   closeBtn.style.top = y + 'px';
@@ -575,12 +601,15 @@ const dragEnd = (evt) => {
     window.removeEventListener('mousemove', drag, false);
     window.removeEventListener('mouseup', dragEnd, false);
   }
+  document.body.classList.remove('dragging');
+};
+
+const resize = (evt) => {
+  windowWidth = window.innerWidth;
+  windowHeight = window.innerHeight;
 };
 
 const createApp = () => {
-  const numberOfVideos = dataObject.length - 1;
-  const isSingleVideoPage = numberOfVideos === 1;
-
   const app = createEl('div', { id: 'my-app' });
   const body = createEl('div', { id: 'my-app-body' });
 
@@ -589,52 +618,50 @@ const createApp = () => {
   bodyInfo.innerHTML = msg.btn;
 
   // no filter option on a single video page
-  if (!isSingleVideoPage) {
-    bodyInfo.style.display = 'none';
+  bodyInfo.style.display = 'none';
 
-    const header = createEl('div', { id: 'my-app-header' });
-    const info = createEl('div', { class: 'my-app-info' });
-    info.innerHTML = `Number of Videos: ${numberOfVideos}`;
-    header.append(info);
+  header = createEl('div', { id: 'my-app-header' });
+  info = createEl('div', { class: 'my-app-info' });
+  info.innerHTML = `Number of Videos:`;
+  header.append(info);
 
-    const filterElement = createEl('div', { id: 'my-app-filter' });
+  const filterElement = createEl('div', { id: 'my-app-filter' });
 
-    searchField = createEl('input', {
-      type: 'text',
-      id: 'my-app-field',
-      name: 'fake_user[name]',
-      value: '',
-      autocomplete: 'new-password',
-      spellcheck: 'false',
-      'aria-autocomplete': 'none',
-      placeholder: 'filter videos by name ...',
-    });
+  searchField = createEl('input', {
+    type: 'text',
+    id: 'my-app-field',
+    name: 'fake_user[name]',
+    value: '',
+    autocomplete: 'new-password',
+    spellcheck: 'false',
+    'aria-autocomplete': 'none',
+    placeholder: 'filter videos by name ...',
+  });
 
-    const hint = createEl('div', { class: 'my-app-info' });
-    hint.innerHTML = 'Type * to see the full episode/broadcast';
+  const hint = createEl('div', { class: 'my-app-info' });
+  hint.innerHTML = 'Type * to see the full episode/broadcast';
 
-    clearBtn = document.createElement('div');
-    clearBtn.id = 'my-app-clear';
-    clearBtn.innerHTML = 'X';
-    toggleClearBtn(true);
+  clearBtn = document.createElement('div');
+  clearBtn.id = 'my-app-clear';
+  clearBtn.innerHTML = 'X';
+  toggleClearBtn(true);
 
-    filterElement.append(searchField);
-    filterElement.append(clearBtn);
+  filterElement.append(searchField);
+  filterElement.append(clearBtn);
 
-    header.append(filterElement);
-    header.append(hint);
+  header.append(filterElement);
+  header.append(hint);
 
-    clearBtn.addEventListener('click', clear, false);
-    searchField.addEventListener('input', onInput, false);
-
-    mainDiv.append(header);
-  }
+  clearBtn.addEventListener('click', clear, false);
+  searchField.addEventListener('input', onInput, false);
+  mainDiv.append(header);
 
   closeBtn = createEl('div', { id: 'my-app-close' });
 
   closeBtn.addEventListener('click', toggle);
-  // closeBtn.addEventListener('touchstart', move);
 
+  window.addEventListener('resize', resize);
+  resize();
   closeBtn.addEventListener('mousedown', dragStart);
   closeBtn.addEventListener('touchstart', dragStart, passiveIfSupported);
 
@@ -714,6 +741,11 @@ const init = async (createGui = true) => {
 
   if (createGui) {
     createApp();
+    if (2 === dataObject.length) {
+      header.classList.add('hidden');
+    } else {
+      header.classList.remove('hidden');
+    }
   }
 
   if (isOpen) {
@@ -740,3 +772,5 @@ const init = async (createGui = true) => {
 };
 
 setTimeout(init, 10);
+
+export default init;

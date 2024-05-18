@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.6.1
+### Added or Changed
+- bug fixes
+
 ## v0.6.0
 ### Added or Changed
 - moved to pnpm
