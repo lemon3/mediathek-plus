@@ -1,7 +1,7 @@
 {
   "name": "orfdl",
   "displayName": "ORF DL",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "type": "module",
   "description": "orf tvthek video download helper",
   "main": "index.js",
@@ -24,6 +24,6 @@
     "vite-plugin-string-replace": "^1.1.2"
   },
   "dependencies": {
-    "globals": "^15.2.0"
+    "globals": "^15.3.0"
   }
 }

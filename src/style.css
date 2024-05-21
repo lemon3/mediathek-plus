@@ -10,6 +10,8 @@ body.dragging > * {
   --color-3: #72bbe9;
   --color-4: #c9c9c9;
   --color-5: #222222;
+  --color-6: #555555;
+  --color-7: #aedaf5;
   --font-small: 12px;
   --font-tiny: 10px;
 }
@@ -53,11 +55,43 @@ body.dragging > * {
 #my-app-header.hidden {
   display: none;
 }
+.my-app-buttons {
+  display: flex;
+  font-size: 14px;
+  gap: 0.5em;
+}
+
+.my-app-button {
+  font-size: var(--font-small);
+  color: var(--color-4);
+  background-color: var(--color-5);
+  cursor: pointer;
+  display: flex;
+  flex: 1 1 auto;
+  justify-content: center;
+  text-align: center;
+  width: 50%;
+  padding: 0.5em;
+  border-radius: 6px;
+}
+
+.my-app-button.active {
+  color: var(--color-2);
+  background-color: var(--color-3);
+}
+
+.my-app-button.active:hover {
+  background-color: var(--color-7);
+}
 
 #my-app-filter {
   display: flex;
   align-items: stretch;
   margin-top: 0.5em;
+}
+
+#my-app-filter.hidden {
+  display: none;
 }
 
 #my-app-content {
@@ -115,6 +149,8 @@ body.dragging > * {
   position: relative;
   transition: transform 0.1s ease-out;
   border: 1px solid var(--color-5);
+  box-shadow: 0 2px 12px -3px rgba(255, 255, 255, 0.8);
+  border-radius: 6px;
 }
 
 #my-app-box.open {
@@ -133,10 +169,11 @@ body.dragging > * {
   background-position: center center;
   flex: none;
   border: none;
+  border-radius: 6px;
 }
 
 #my-app .my-app-shareBtn:hover {
-  background-color: var(--color-4);
+  background-color: var(--color-7);
   cursor: pointer;
 }
 
@@ -191,8 +228,7 @@ body.dragging > * {
 #my-app .success .my-app-copy {
   opacity: 1;
 }
-
-#my-app .active {
+.my-app-imgWrap.active {
   box-shadow: 0 0 0 2px rgb(255, 255, 84);
   filter: brightness(1.2);
 }
@@ -200,4 +236,5 @@ body.dragging > * {
 #my-app-footer {
   font-size: var(--font-tiny);
   text-align: right;
+  padding: 0.5em;
 }

@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   globals:
-    specifier: ^15.2.0
-    version: 15.2.0
+    specifier: ^15.3.0
+    version: 15.3.0
 
 devDependencies:
   eslint:
@@ -751,8 +751,8 @@ packages:
     engines: {node: '>=18'}
     dev: true
 
-  /globals@15.2.0:
-    resolution: {integrity: sha512-FQ5YwCHZM3nCmtb5FzEWwdUc9K5d3V/w9mzcz8iGD1gC/aOTHc6PouYu0kkKipNJqHAT7m51sqzQjEjIP+cK0A==}
+  /globals@15.3.0:
+    resolution: {integrity: sha512-cCdyVjIUVTtX8ZsPkq1oCsOsLmGIswqnjZYMJJTGaNApj1yHtLSymKhwH51ttirREn75z3p4k051clwg7rvNKA==}
     engines: {node: '>=18'}
     dev: false
 

@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.7.0
+### Added or Changed
+- huge update (updated gui)
+- drop tvtheke support as it is officially deprecated now.
+
 ## v0.6.1
 ### Added or Changed
 - bug fixes
