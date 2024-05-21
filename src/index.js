@@ -16,7 +16,7 @@ const msg = {
 };
 
 const version = pack.version;
-// let quality = 'Q8C';
+let quality = 'Q8C';
 let delivery = 'hls';
 
 const styleText = css.toString(); //.replace(/\s+/g, ' ');
@@ -441,7 +441,7 @@ class OrfOn {
       // get best hls resource
       obj.sources[delivery].forEach((media) => {
         if ('qxa' === media.quality_key.toLocaleLowerCase()) {
-          link = media.src;
+          link = media.src.replace('QXA', quality);
         }
       });
 
