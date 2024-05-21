@@ -9,7 +9,6 @@ const userScriptHeader = `// ==UserScript==
 // @version      ${pkg.version}
 // @description  ${pkg.description}
 // @author       ${pkg.author}
-// @match        https://*.tvthek.orf.at/profile/*
 // @match        https://on.orf.at/video/*
 // @icon         ${icon}
 // @grant        none

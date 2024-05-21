@@ -4,7 +4,6 @@
 // @version      0.7.0
 // @description  orf tvthek video download helper
 // @author       lemon3
-// @match        https://*.tvthek.orf.at/profile/*
 // @match        https://on.orf.at/video/*
 // @icon         https://raw.githubusercontent.com/lemon3/orfdl/main/_assets/dl.svg
 // @grant        none
