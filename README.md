@@ -12,7 +12,7 @@
   <a href="https://github.com/lemon3/orfdl">
     <img src="https://raw.githubusercontent.com/lemon3/orfdl/main/_assets/dl.svg" alt="Logo" width="140" height="auto">
   </a>
-  <h3 align="center">orf tvthek video download helper</h3>
+  <h3 align="center">orf on video</h3>
 </div>
 
 <!-- TABLE OF CONTENTS -->
@@ -34,10 +34,8 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-A small helper to get the link for a given video from tvthek.orf.at or from on.orf.at.
-Useful to download videos on the run (mobile device).
-
-(btw.: this script doesn't download files, it's just a helper for fetching links).
+A small helper to get the source for a given video from on.orf.at.
+**Note: this script doesn't download files!**
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -54,10 +52,10 @@ you need to extend safari ([what are extension?](https://support.apple.com/en-gb
 2) in the userscripts app set the location, where you would like to store your userscripts.
 3) now download this [script](https://raw.githubusercontent.com/lemon3/orfdl/main/dist/orfdl.user.js) and save it to your recently defined userscripts directory.
 
-**if you want to download:**
+**for downloading content:**
 1) download [a-shell-mini](https://apps.apple.com/at/app/a-shell-mini/id1543537943) or [a-shell](https://apps.apple.com/at/app/a-shell/id1473805438) (this app is needed to download the videos).
-2) go to the **orf tvtheke** site and look for a video. An additional menu will appear at the top left, with the help of which you can copy the video link to the clipboard or filter the videos if the show/broadcast has multiple files/segments.
-3) just paste this video-link into „a-shell“ or „a-shell mini“, and the file will be downloaded.
+2) go to **orf on** site and copy the video link.
+3) paste this video-link into „a-shell“ or „a-shell mini“, and the file will be downloaded.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -69,7 +67,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 <!-- CONTACT -->
 ## Contact
-wolfgang - lemon3.at
+lemon3.at
 
 Project Link: [https://github.com/lemon3/orfdl](https://github.com/lemon3/orfdl)
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
