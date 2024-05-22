@@ -25,7 +25,7 @@ body.dragging > * {
   color: var(--color-4);
 }
 
-#my-app .my-app-info {
+.my-app-info {
   font-size: var(--font-small);
 }
 
@@ -158,10 +158,15 @@ body.dragging > * {
   transition: transform 0.2s ease-out;
 }
 
-#my-app .my-app-shareBtn {
-  background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCI+PHBhdGggZD0iTTE1Ljk4NCA1LjAxNmwtMS40MDYgMS40MDYtMS41OTQtMS41OTR2MTEuMTU2aC0xLjk2OVY0LjgyOEw5LjQyMSA2LjQyMiA4LjAxNSA1LjAxNiAxMS45OTkuOTg1em00LjAzMiA0Ljk2OFYyMXEwIC44NDQtLjU4NiAxLjQzdC0xLjQzLjU4Nkg2cS0uODQ0IDAtMS40My0uNTg2VDMuOTg0IDIxVjkuOTg0cTAtLjc5Ny41ODYtMS4zODNUNiA4LjAxNWgzdjEuOTY5SDZWMjFoMTJWOS45ODRoLTNWOC4wMTVoM3EuODQ0IDAgMS40My41ODZ0LjU4NiAxLjM4M3oiLz48L3N2Zz4=);
-  width: 32px;
-  height: 32px;
+.my-app-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+}
+
+.my-app-action {
+  width: 36px;
+  height: 36px;
   background-color: var(--color-3);
   display: flex;
   background-size: 70%;
@@ -172,24 +177,34 @@ body.dragging > * {
   border-radius: 6px;
 }
 
-#my-app .my-app-shareBtn:hover {
+.my-app-newTab {
+  background-image: url(data:image/svg+xml;base64,PHN2ZyBlbmFibGUtYmFja2dyb3VuZD0ibmV3IDAgMCAyNTYgMjU2IiB2aWV3Qm94PSIwIDAgMjU2IDI1NiIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSIjMWQxZDFiIj48cGF0aCBkPSJtMjMzLjYgMjYuNGgtMTY3LjJjLTQuMSAwLTcuNSAzLjQtNy41IDcuNXYzOC4zaC0zNi41Yy00LjEgMC03LjUgMy40LTcuNSA3LjV2MTQwLjVjMCA0LjEgMy40IDcuNSA3LjUgNy41aDE2Ny4yYzQuMSAwIDcuNS0zLjQgNy41LTcuNXYtMzguMmgzNi42YzQuMSAwIDcuNS0zLjQgNy41LTcuNXYtMTQwLjZjLS4xLTQuMS0zLjQtNy41LTcuNi03LjV6bS01MS41IDE4Ni40aC0xNTIuMnYtMTI1LjVoMjkuMXY4Ny4yYzAgNC4xIDMuNCA3LjUgNy41IDcuNWgxMTUuN3YzMC44em00NC00NS44aC0yOS4xLTE1LTEwOC4xdi03OS43LTE1LTMwLjloMTUyLjJ6Ii8+PHBhdGggZD0ibTE5NS4yIDk2LjdoLTM3Ljd2LTM0YzAtNC4xLTMuNC03LjUtNy41LTcuNXMtNy41IDMuNC03LjUgNy41djM0aC0zNy43Yy00LjEgMC03LjUgMy40LTcuNSA3LjVzMy40IDcuNSA3LjUgNy41aDM3Ljd2MzRjMCA0LjEgMy40IDcuNSA3LjUgNy41czcuNS0zLjQgNy41LTcuNXYtMzRoMzcuN2M0LjEgMCA3LjUtMy40IDcuNS03LjVzLTMuMy03LjUtNy41LTcuNXoiLz48L2c+PC9zdmc+);
+}
+
+.my-app-shareBtn {
+  background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCI+PHBhdGggZD0iTTE1Ljk4NCA1LjAxNmwtMS40MDYgMS40MDYtMS41OTQtMS41OTR2MTEuMTU2aC0xLjk2OVY0LjgyOEw5LjQyMSA2LjQyMiA4LjAxNSA1LjAxNiAxMS45OTkuOTg1em00LjAzMiA0Ljk2OFYyMXEwIC44NDQtLjU4NiAxLjQzdC0xLjQzLjU4Nkg2cS0uODQ0IDAtMS40My0uNTg2VDMuOTg0IDIxVjkuOTg0cTAtLjc5Ny41ODYtMS4zODNUNiA4LjAxNWgzdjEuOTY5SDZWMjFoMTJWOS45ODRoLTNWOC4wMTVoM3EuODQ0IDAgMS40My41ODZ0LjU4NiAxLjM4M3oiLz48L3N2Zz4=);
+}
+
+.my-app-action:hover {
   background-color: var(--color-7);
   cursor: pointer;
 }
 
-#my-app .my-app-result {
-  display: flex;
-  flex-flow: row wrap;
+.my-app-result {
   padding: 1em;
 }
 
-#my-app .my-app-result:nth-child(odd) {
+.my-app-result:nth-child(odd) {
   background-color: var(--color-5);
 }
 
-#my-app .my-app-bar {
-  width: 100%;
-  flex: 1 1 100%;
+.my-app-main {
+  display: flex;
+  flex-flow: row nowrap;
+  gap: 0.5em;
+}
+
+.my-app-bar {
   font-size: var(--font-small);
   display: flex;
   justify-content: space-between;
@@ -197,37 +212,43 @@ body.dragging > * {
   margin-bottom: 0.5em;
 }
 
-#my-app .my-app-title {
+.my-app-title {
+  font-size: var(--font-small);
   display: flex;
+  width: 100%;
+  flex: 1 0 100%;
   padding: 0.5em 0.5em 0.5em 0;
   line-height: 1.4em;
 }
 
-#my-app .my-app-copy {
-  font-size: 30px;
-}
-
-#my-app .my-app-imgWrap {
-  width: 100%;
+.my-app-imgWrap {
   display: flex;
+  flex: 1 1 auto;
   position: relative;
+  cursor: pointer;
 }
 
-#my-app .my-app-copy {
+.my-app-imgWrap img {
+  max-width: 100%;
+}
+
+.my-app-copy {
+  font-size: 25px;
   position: absolute;
   text-align: center;
   width: 100%;
-  left: 0;
-  top: 35%;
-  background-color: rgba(0, 0, 0, 0.4);
-  padding: 10px;
-  opacity: 0;
+  background-color: #0006;
+  padding: 6px;
   transition: opacity ease-out 0.2s;
+  display: flex;
+  justify-content: center;
+  align-self: center;
 }
 
 #my-app .success .my-app-copy {
   opacity: 1;
 }
+
 .my-app-imgWrap.active {
   box-shadow: 0 0 0 2px rgb(255, 255, 84);
   filter: brightness(1.2);

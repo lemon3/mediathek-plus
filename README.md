@@ -35,7 +35,7 @@
 ## About The Project
 
 A small helper to get the source for a given video from on.orf.at.
-**Note: this script doesn't download files!**
+**Note:** this script **DOESN'T** download files!
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -46,16 +46,15 @@ A so call userscript handler is needed.
 There is one for each browser available, you can decide between tampermonkey, greasemonkey, violentmonkey, userscripts, ...
 
 #### example (iOS, mobile Safari)
-you need to extend safari ([what are extension?](https://support.apple.com/en-gb/guide/iphone/iphab0432bf6/ios)).
 **step-by-step guide:**
-1) download [userscripts](https://apps.apple.com/us/app/userscripts/id1463298887) extension form the App Store.
+1) download [userscripts](https://apps.apple.com/us/app/userscripts/id1463298887) form the App Store (this is a safari extension)
 2) in the userscripts app set the location, where you would like to store your userscripts.
 3) now download this [script](https://raw.githubusercontent.com/lemon3/orfdl/main/dist/orfdl.user.js) and save it to your recently defined userscripts directory.
 
-**for downloading content:**
+**for downloading content** (only for personal use):
 1) download [a-shell-mini](https://apps.apple.com/at/app/a-shell-mini/id1543537943) or [a-shell](https://apps.apple.com/at/app/a-shell/id1473805438) (this app is needed to download the videos).
-2) go to **orf on** site and copy the video link.
-3) paste this video-link into „a-shell“ or „a-shell mini“, and the file will be downloaded.
+2) go to **orf on** site and copy the video link. (via this user script)
+3) paste this video-link into „a-shell“ and the file will be downloaded.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

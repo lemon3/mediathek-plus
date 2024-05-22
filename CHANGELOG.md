@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.7.1
+### Added or Changed
+- improvements
+- bug fixes
+
 ## v0.7.0
 ### Added or Changed
 - huge update (updated gui)

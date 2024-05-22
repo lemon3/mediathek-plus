@@ -11,8 +11,15 @@ import pack from '../package.json'; // assert { type: 'json' };
 const cs = enableConsole('cs');
 // window.cs = cs;
 
+// messages
 const msg = {
-  btn: 'Click on the image to copy the video-link to the clipboard',
+  btn: 'Auf das Bild klicken um den video-link in die Zwischenablage zu kopieren',
+  nothingFound: 'Auf dieser Seite gibt es kein Video!',
+  filterVideos: 'Beiträge filtern ...',
+  shareVideo: 'Video Link teilen',
+  openTab: 'Video Link in neuem Tab öffnen',
+  completeBroadcast: 'Ganze Sendung anzeigen',
+  individualPosts: 'Einzelne Beiträge anzeigen',
 };
 
 const version = pack.version;
@@ -37,7 +44,8 @@ const orfOnCleanUp = (obj) => {
 const addLeadingZero = (string, max = 2) => ('0' + string).slice(-max);
 
 const imageClicked = (evt) => {
-  let ta = evt.target.parentElement.nextElementSibling;
+  let ta = evt.target.nextElementSibling;
+  // cs.log(evt.target, ta);
   ta.select();
   if (navigator.clipboard) {
     let text = ta.innerHTML;
@@ -89,8 +97,8 @@ class OrfOn {
     this.oldSearchString = null;
     this.dataObject = [];
 
+    this.currentSite = window.location.href;
     this.createWatcher();
-
     if (this.settings.createGui) {
       this.createApp();
     }
@@ -101,22 +109,29 @@ class OrfOn {
 
   createWatcher() {
     // observer
-    const canonical = document.querySelector('link[rel="canonical"]');
+    const url = document.querySelector('[property="og:url"]');
+    // cs.log('createWatcher', url);
+
     const config = {
       attributes: true,
-      subtree: true,
-      attributeOldValue: true,
+      // subtree: true,
+      // attributeOldValue: true,
     };
 
     const callback = (mutationList) => {
       for (const mutation of mutationList) {
-        if (mutation.type === 'attributes') {
+        if (
+          mutation.type === 'attributes' &&
+          window.location.href !== this.currentSite
+        ) {
           this.reInit();
+          this.currentSite = window.location.href;
         }
       }
     };
     const observer = new MutationObserver(callback);
-    observer.observe(canonical, config);
+    observer.observe(url, config);
+    return true;
   }
 
   renderSearchResults = (results) => {
@@ -135,7 +150,6 @@ class OrfOn {
       const bar = createEl(div, { class: 'my-app-bar' });
       const title = createEl(div, { class: 'my-app-title' });
       title.innerHTML = obj.title;
-      bar.append(title);
 
       const textArea = createEl(
         'textarea',
@@ -162,10 +176,8 @@ class OrfOn {
         { flex: 'auto' }
       );
       img.dataset.drm = null === obj.drm ? false : obj.drm;
-      imgWrapper.append(img);
-      imgWrapper.append(copyInfo);
 
-      let message;
+      let message = '';
       if (!obj.drm) {
         const y = obj.date.getFullYear();
         const m = addLeadingZero(+obj.date.getMonth() + 1);
@@ -180,18 +192,34 @@ class OrfOn {
         const name = `${dateString}_${timeString}_${videoTitle}.mp4`;
         message = `yt-dlp ${obj.link} -o '${name}'`;
 
-        const shareButton = createEl('button', { class: 'my-app-shareBtn' });
+        const buttons = createEl('div', { class: 'my-app-actions' });
+
+        const shareButton = createEl('button', {
+          class: 'my-app-action my-app-shareBtn',
+        });
         shareButton.dataset.share = true;
         shareButton.dataset.shareUrl = obj.link;
-        shareButton.title = 'share video link';
+        shareButton.title = msg.shareVideo;
 
-        bar.append(shareButton);
+        const newTabButton = createEl('a', {
+          class: 'my-app-action my-app-newTab',
+        });
+        newTabButton.target = '_blank';
+        newTabButton.href = obj.link;
+        newTabButton.title = msg.openTab;
+
+        buttons.append(newTabButton, shareButton);
+        bar.append(buttons);
       }
 
       textArea.innerHTML = message;
-      result.append(bar);
-      result.append(imgWrapper);
-      result.append(textArea);
+      imgWrapper.append(img, textArea, copyInfo);
+
+      const resultMain = createEl('div', { class: 'my-app-main' });
+      resultMain.append(imgWrapper, bar);
+
+      result.append(title, resultMain);
+
       fragment.append(result);
     }
 
@@ -260,6 +288,9 @@ class OrfOn {
 
     this.closeBtn.style.left = x + 'px';
     this.closeBtn.style.top = y + 'px';
+
+    this.x = x;
+    this.y = y;
   }
 
   drag = (evt) => {
@@ -331,26 +362,27 @@ class OrfOn {
         const tmp = window.__NUXT__.data;
 
         const data = Object.entries(tmp);
-        let playerObject;
+        let playerObject = [];
 
-        // cs.log(count);
+        // cs.log('count', count);
 
         data.forEach((entry) => {
           const [key, obj] = entry;
-
-          // https://on.orf.at/video/14227160
-
-          if (obj.sources && document.location.pathname.match(obj.id)) {
-            playerObject = obj;
+          if (obj.sources) {
+            playerObject.push(obj);
             orfOnCleanUp(obj);
             this.currentKey = key;
             return;
           }
         });
 
-        if (playerObject) {
+        if (playerObject.length) {
+          const filtered = playerObject.filter((obj) =>
+            document.location.pathname.match(obj.id)
+          );
+          // cs.log('filtered', filtered);
           count = 0;
-          resolve(playerObject);
+          return resolve(filtered[0]);
         } else {
           if (count > 20) {
             clearTimeout(to);
@@ -445,6 +477,11 @@ class OrfOn {
         }
       });
 
+      // no link given
+      if (!link) {
+        return false;
+      }
+
       const drm =
         'undefined' !== typeof obj.is_drm_protected
           ? obj.is_drm_protected
@@ -465,13 +502,13 @@ class OrfOn {
     };
 
     const all = createOne(playerObject, 'all');
-    output.push(all);
+    if (all) output.push(all);
 
     if (playerObject.segments) {
       // single
       playerObject.segments.forEach((s) => {
         const segment = createOne(s);
-        output.push(segment);
+        if (segment) output.push(segment);
       });
     }
 
@@ -482,12 +519,15 @@ class OrfOn {
     let playerObject;
     try {
       playerObject = await this.orfOnFetchData();
+      if (playerObject) {
+        playerObject = this.createOrfOn(playerObject);
+      }
       // cs.log('playerObject', playerObject);
+      return playerObject;
     } catch (error) {
       console.log(error);
       return false;
     }
-    return this.createOrfOn(playerObject);
   };
 
   createApp() {
@@ -497,16 +537,15 @@ class OrfOn {
 
     this.mainDiv = createEl(div, { id: 'my-app-box' }, { display: 'none' });
 
-    // cs.log(this.mainDiv);
     // this.bodyInfo = createEl(div, { class: 'my-app-info' });
     // this.bodyInfo.innerHTML = msg.btn;
 
     this.header = createEl(div, { id: 'my-app-header' });
     this.showAllButton = createEl(div, { class: 'my-app-button' });
-    this.showAllButton.innerHTML = 'Ganze Sendung anzeigen';
+    this.showAllButton.innerHTML = msg.completeBroadcast;
 
     this.showSegmentsButton = createEl(div, { class: 'my-app-button' });
-    this.showSegmentsButton.innerHTML = 'Einzelne Beiträge anzeigen';
+    this.showSegmentsButton.innerHTML = msg.individualPosts;
 
     this.buttons = createEl(div, { class: 'my-app-buttons' });
 
@@ -523,7 +562,7 @@ class OrfOn {
       autocomplete: 'new-password',
       spellcheck: 'false',
       'aria-autocomplete': 'none',
-      placeholder: 'filter videos by name ...',
+      placeholder: msg.filterVideos,
     });
 
     this.clearBtn = document.createElement(div);
@@ -539,11 +578,7 @@ class OrfOn {
     this.mainDiv.append(this.header);
 
     this.closeBtn = createEl(div, { id: 'my-app-close' });
-
     this.closeBtn.addEventListener('click', this.toggle);
-
-    window.addEventListener('resize', this.resize);
-    this.resize();
 
     this.closeBtn.addEventListener('mousedown', this.dragStart);
     this.closeBtn.addEventListener(
@@ -580,8 +615,8 @@ class OrfOn {
     this.activeTab = tabName;
   }
 
-  showAll = () => {
-    if ('1' === this.activeTab) {
+  showAll = (evt) => {
+    if (evt && 1 === this.activeTab) {
       return false;
     }
     // cs.log('showAll');
@@ -593,8 +628,8 @@ class OrfOn {
     this.setActiveTab(1);
   };
 
-  showSegments = () => {
-    if ('2' === this.activeTab) {
+  showSegments = (evt) => {
+    if (evt && 2 === this.activeTab) {
       return false;
     }
     this.showAllButton.classList.remove('active');
@@ -613,6 +648,8 @@ class OrfOn {
   resize = () => {
     this.windowWidth = window.innerWidth;
     this.windowHeight = window.innerHeight;
+    // cs.log(this.x);
+    // this.setPos();
   };
 
   reInit = () => {
@@ -626,8 +663,12 @@ class OrfOn {
 
   start = async () => {
     this.dataObject = await this.createDataObject();
+    // cs.log('dataObject', this.dataObject);
     // early exit nothing found
     if (!this.dataObject || !this.dataObject.length) {
+      // cs.log('exit');
+      this.header.classList.add('hidden');
+      this.contentDiv.innerHTML = `<div class="my-app-result" style="text-align:center;">${msg.nothingFound}</div>`;
       return;
     }
 
@@ -637,25 +678,37 @@ class OrfOn {
       this.header.classList.add('hidden');
       const filtered = this.dataObject.filter((el) => 'single' === el.type);
       this.renderSearchResults(filtered);
-    } else {
-      this.header.classList.remove('hidden');
-      this.searchField.value = this.autoSearch;
+      cs.log(filtered);
 
-      cs.log('activeTab', this.activeTab);
+      // TODO: optimize ...
+      const orfButtons = document.querySelector('.content .buttons');
+      if (orfButtons) {
+        const newBtn = createEl('button', { class: 'button s-48 tertiary' });
+        // clear event
+        newBtn.addEventListener('click', (evt) => {
+          evt.preventDefault();
+          window.open(filtered[0].link, '_blank');
+        });
 
-      if (1 === this.activeTab) {
-        this.showAll();
-      } else if (2 === this.activeTab) {
-        this.showSegments();
-        // this.searchField.dispatchEvent(new Event('input'));
-        // this.searchField.focus();
-        // cs.log(this.autoSearch);
-        // this.searchNow(this.autoSearch);
+        setTimeout(() => {
+          newBtn.innerHTML = 'Abspielen';
+          orfButtons.append(newBtn);
+        }, 200);
       }
+
+      return;
     }
+
+    this.header.classList.remove('hidden');
+    this.searchField.value = this.autoSearch;
+
+    if (1 === this.activeTab) this.showAll();
+    else this.showSegments();
   };
 
   init() {
+    if (this.appInitialized) return false;
+    this.appInitialized = true;
     // cs.log('init');
     let ls = this.store.get(this.name);
     this.activeTab = 1;
@@ -673,9 +726,6 @@ class OrfOn {
         this.activeTab = +ls.activeTab;
       }
     }
-
-    cs.log(ls);
-    cs.log(this.activeTab);
 
     this.start();
 
@@ -703,14 +753,25 @@ const init = () => {
   new OrfOn();
 };
 
-let inter = setInterval(() => {
-  init();
-  // cs.log('ssss');
-  if (window.orfdl_initialized) {
-    clearInterval(inter);
-  }
-}, 10);
+// let inter = setInterval(() => {
+//   init();
+//   if (window.orfdl_initialized) {
+//     clearInterval(inter);
+//   }
+// }, 10);
 
 // setTimeout(init, 10);
+
+if (window.top === window.self) {
+  if (
+    'complete' === document.readyState ||
+    'interactive' === document.readyState
+  ) {
+    init();
+    document.removeEventListener('DOMContentLoaded', init);
+  } else {
+    document.addEventListener('DOMContentLoaded', init, false);
+  }
+}
 
 export default init;

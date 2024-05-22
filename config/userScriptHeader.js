@@ -9,7 +9,7 @@ const userScriptHeader = `// ==UserScript==
 // @version      ${pkg.version}
 // @description  ${pkg.description}
 // @author       ${pkg.author}
-// @match        https://on.orf.at/video/*
+// @match        https://on.orf.at/*
 // @icon         ${icon}
 // @grant        none
 // @run-at       document-end

@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         ORF DL
 // @namespace    https://github.com/lemon3/
-// @version      0.7.1
+// @version      0.7.2
 // @description  orf tvthek video download helper
 // @author       lemon3
-// @match        https://on.orf.at/video/*
+// @match        https://on.orf.at/*
 // @icon         https://raw.githubusercontent.com/lemon3/orfdl/main/_assets/dl.svg
 // @grant        none
 // @run-at       document-end
