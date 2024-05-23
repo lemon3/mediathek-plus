@@ -2,10 +2,10 @@ import css from './style.css?inline';
 // import smiley from './icons/smiley.svg';
 
 import {
-  passiveIfSupported,
   createEl,
   Store,
-  restrict,
+  // passiveIfSupported,
+  // restrict,
   // enableConsole,
 } from '@/tools.js';
 import pack from '../package.json'; // assert { type: 'json' };
@@ -30,18 +30,6 @@ let delivery = 'hls';
 
 const styleText = css.toString(); //.replace(/\s+/g, ' ');
 let to;
-
-const orfOnCleanUp = (obj) => {
-  obj.advertising_mapping = {};
-  obj.advertising_query_string = '';
-  obj.adition_advertising_query_string = '';
-  obj.show_display_ads = false;
-  obj.show_instream_ads = false;
-  obj.youth_protection = undefined;
-  obj.age_classification = undefined;
-  obj.disable_display_ads_orf_platforms = true;
-  obj.disable_instream_ads_orf_platforms = true;
-};
 
 const addLeadingZero = (string, max = 2) => ('0' + string).slice(-max);
 
@@ -77,18 +65,18 @@ const shareButtonClicked = (evt) => {
     .catch((error) => console.log('error sharing:', error));
 };
 
-const getPos = (evt) => {
-  let t;
-  if ('undefined' !== typeof evt.clientX) {
-    t = evt;
-  } else {
-    t = evt.touches[0] || evt.changedTouches[0];
-  }
-  return {
-    x: t.clientX,
-    y: t.clientY,
-  };
-};
+// const getPos = (evt) => {
+//   let t;
+//   if ('undefined' !== typeof evt.clientX) {
+//     t = evt;
+//   } else {
+//     t = evt.touches[0] || evt.changedTouches[0];
+//   }
+//   return {
+//     x: t.clientX,
+//     y: t.clientY,
+//   };
+// };
 
 class OrfOn {
   constructor(option) {
@@ -230,6 +218,7 @@ class OrfOn {
 
   contentClicked = (evt) => {
     const t = evt.target;
+
     if (this.currentActive) {
       this.currentActive.classList.remove('active');
       this.currentActive.querySelector('.my-app-copy').style.display = 'none';
@@ -266,55 +255,67 @@ class OrfOn {
     }
   };
 
-  dragStart = (evt) => {
-    this.moved = false;
-    document.body.classList.add('dragging');
-    evt.stopPropagation();
-    if ('touchstart' === evt.type) {
-      this.closeBtn.removeEventListener('mousedown', this.dragStart);
-      window.addEventListener('touchmove', this.drag, passiveIfSupported);
-      window.addEventListener('touchend', this.dragEnd, false);
-    } else if ('mousedown' === evt.type) {
-      this.closeBtn.removeEventListener('touchstart', this.dragStart);
-      window.addEventListener('mousemove', this.drag, false);
-      window.addEventListener('mouseup', this.dragEnd, false);
-    }
+  cleanUp = (obj) => {
+    obj.advertising_mapping = {};
+    obj.advertising_query_string = '';
+    obj.adition_advertising_query_string = '';
+    obj.show_display_ads = false;
+    obj.show_instream_ads = false;
+    obj.youth_protection = undefined;
+    obj.age_classification = undefined;
+    obj.disable_display_ads_orf_platforms = true;
+    obj.disable_instream_ads_orf_platforms = true;
   };
 
-  setPos({ x, y }) {
-    x -= 19;
-    y -= 19;
+  // setPos({ x, y }) {
+  //   x -= 19;
+  //   y -= 19;
 
-    x = restrict(x, 0, this.windowWidth - 38);
-    y = restrict(y, 0, this.windowHeight - 38);
+  //   x = restrict(x, 0, this.windowWidth - 38);
+  //   y = restrict(y, 0, this.windowHeight - 38);
 
-    this.closeBtn.style.left = x + 'px';
-    this.closeBtn.style.top = y + 'px';
+  //   this.closeBtn.style.left = x + 'px';
+  //   this.closeBtn.style.top = y + 'px';
 
-    this.x = x;
-    this.y = y;
-  }
+  //   this.x = x;
+  //   this.y = y;
+  // }
 
-  drag = (evt) => {
-    evt.preventDefault();
-    let pos = getPos(evt);
-    this.moved = true;
-    this.setPos(pos);
-  };
+  // dragStart = (evt) => {
+  //   this.moved = false;
+  //   document.body.classList.add('dragging');
+  //   evt.stopPropagation();
+  //   if ('touchstart' === evt.type) {
+  //     this.closeBtn.removeEventListener('mousedown', this.dragStart);
+  //     window.addEventListener('touchmove', this.drag, passiveIfSupported);
+  //     window.addEventListener('touchend', this.dragEnd, false);
+  //   } else if ('mousedown' === evt.type) {
+  //     this.closeBtn.removeEventListener('touchstart', this.dragStart);
+  //     window.addEventListener('mousemove', this.drag, false);
+  //     window.addEventListener('mouseup', this.dragEnd, false);
+  //   }
+  // };
 
-  dragEnd = (evt) => {
-    if ('touchend' === evt.type) {
-      window.removeEventListener('touchmove', this.drag, passiveIfSupported);
-      window.removeEventListener('touchend', this.dragEnd);
-    } else if ('mouseup' === evt.type) {
-      window.removeEventListener('mousemove', this.drag, false);
-      window.removeEventListener('mouseup', this.dragEnd, false);
-    }
+  // drag = (evt) => {
+  //   evt.preventDefault();
+  //   let pos = getPos(evt);
+  //   this.moved = true;
+  //   this.setPos(pos);
+  // };
 
-    let { x, y } = getPos(evt);
-    this.store.set(this.name, { posX: x, posY: y });
-    document.body.classList.remove('dragging');
-  };
+  // dragEnd = (evt) => {
+  //   if ('touchend' === evt.type) {
+  //     window.removeEventListener('touchmove', this.drag, passiveIfSupported);
+  //     window.removeEventListener('touchend', this.dragEnd);
+  //   } else if ('mouseup' === evt.type) {
+  //     window.removeEventListener('mousemove', this.drag, false);
+  //     window.removeEventListener('mouseup', this.dragEnd, false);
+  //   }
+
+  //   let { x, y } = getPos(evt);
+  //   this.store.set(this.name, { posX: x, posY: y });
+  //   document.body.classList.remove('dragging');
+  // };
 
   open = () => {
     this.mainDiv.style.display = 'block';
@@ -350,52 +351,6 @@ class OrfOn {
     } else {
       this.open();
     }
-  };
-
-  orfOnFetchData = async () => {
-    let count = 0;
-    let to;
-    return new Promise((resolve, reject) => {
-      const get = () => {
-        if (!window.__NUXT__) {
-          reject();
-        }
-        count++;
-        const tmp = window.__NUXT__.data;
-
-        const data = Object.entries(tmp);
-        let playerObject = [];
-
-        // cs.log('count', count);
-
-        data.forEach((entry) => {
-          const [key, obj] = entry;
-          if (obj.sources) {
-            playerObject.push(obj);
-            orfOnCleanUp(obj);
-            this.currentKey = key;
-            return;
-          }
-        });
-
-        if (playerObject.length) {
-          const filtered = playerObject.filter((obj) =>
-            document.location.pathname.match(obj.id)
-          );
-          // cs.log('filtered', filtered);
-          count = 0;
-          return resolve(filtered[0]);
-        } else {
-          if (count > 20) {
-            clearTimeout(to);
-            to = null;
-            return reject();
-          }
-          to = setTimeout(() => get(), 150);
-        }
-      };
-      get();
-    });
   };
 
   clear = () => {
@@ -460,17 +415,61 @@ class OrfOn {
     }
   }
 
-  createOrfOn(playerObject) {
+  fetchData = async () => {
+    let count = 0;
+    let to;
+    return new Promise((resolve, reject) => {
+      const get = () => {
+        if (!window.__NUXT__) {
+          reject();
+        }
+        count++;
+        let playerObject = [];
+        const tmp = window.__NUXT__.data;
+
+        if (tmp) {
+          const data = Object.entries(tmp);
+          // cs.log('count', count);
+          data.forEach((entry) => {
+            const [key, obj] = entry;
+            if (obj.sources) {
+              playerObject.push(obj);
+              this.cleanUp(obj);
+              this.currentKey = key;
+              return;
+            }
+          });
+        }
+
+        if (playerObject.length) {
+          const filtered = playerObject.filter((obj) =>
+            document.location.pathname.match(obj.id)
+          );
+          // cs.log('filtered', filtered);
+          count = 0;
+          return resolve(filtered[0]);
+        } else {
+          if (count > 20) {
+            clearTimeout(to);
+            to = null;
+            return reject();
+          }
+          to = setTimeout(() => get(), 150);
+        }
+      };
+      get();
+    });
+  };
+
+  construct(playerObject) {
     window.playerObject = playerObject;
     const output = [];
 
     const createOne = (obj, type = 'single') => {
-      orfOnCleanUp(obj);
+      this.cleanUp(obj);
       let link = null;
       let date = obj.date || obj.episode_date;
       date = new Date(date);
-      // const d = new Date(obj.date);
-      // const date = `${d.getUTCFullYear()}-${d.getUTCMonth()+1}-${d.getUTCDate()}`;
 
       // get best hls resource
       obj.sources[delivery].forEach((media) => {
@@ -513,16 +512,15 @@ class OrfOn {
         if (segment) output.push(segment);
       });
     }
-
     return output;
   }
 
   createDataObject = async () => {
     let playerObject;
     try {
-      playerObject = await this.orfOnFetchData();
+      playerObject = await this.fetchData();
       if (playerObject) {
-        playerObject = this.createOrfOn(playerObject);
+        playerObject = this.construct(playerObject);
       }
       // cs.log('playerObject', playerObject);
       return playerObject;
@@ -557,11 +555,11 @@ class OrfOn {
     this.filterElement = createEl(div, { id: 'my-app-filter' });
 
     this.searchField = createEl('input', {
-      type: 'text',
+      type: 'search',
       id: 'my-app-field',
-      name: 'fake_user[name]',
+      name: 'query', // 'fake_user[name]',
       value: '',
-      autocomplete: 'new-password',
+      autocomplete: 'off', //'new-password',
       spellcheck: 'false',
       'aria-autocomplete': 'none',
       placeholder: msg.filterVideos,
@@ -582,12 +580,12 @@ class OrfOn {
     this.closeBtn = createEl(div, { id: 'my-app-close' });
     this.closeBtn.addEventListener('click', this.toggle);
 
-    this.closeBtn.addEventListener('mousedown', this.dragStart);
-    this.closeBtn.addEventListener(
-      'touchstart',
-      this.dragStart,
-      passiveIfSupported
-    );
+    // this.closeBtn.addEventListener('mousedown', this.dragStart);
+    // this.closeBtn.addEventListener(
+    //   'touchstart',
+    //   this.dragStart,
+    //   passiveIfSupported
+    // );
 
     this.contentDiv = createEl(div, { id: 'my-app-content' });
 
@@ -597,15 +595,16 @@ class OrfOn {
     body.append(this.contentDiv);
     this.mainDiv.append(body, footer);
 
-    app.append(this.mainDiv, this.closeBtn);
+    app.append(this.mainDiv);
     const style = createEl('style');
     style.innerHTML = styleText;
-
-    document.body.append(style);
-    document.body.append(app);
+    document.body.append(style, app, this.closeBtn);
 
     // event listener
     app.addEventListener('click', this.contentClicked);
+    document
+      .querySelector('.left-content')
+      .addEventListener('click', this.close);
 
     this.showAllButton.addEventListener('click', this.showAll);
     this.showSegmentsButton.addEventListener('click', this.showSegments);
@@ -647,12 +646,12 @@ class OrfOn {
     this.setActiveTab(2);
   };
 
-  resize = () => {
-    this.windowWidth = window.innerWidth;
-    this.windowHeight = window.innerHeight;
-    // cs.log(this.x);
-    // this.setPos();
-  };
+  // resize = () => {
+  //   this.windowWidth = window.innerWidth;
+  //   this.windowHeight = window.innerHeight;
+  //   // cs.log(this.x);
+  //   // this.setPos();
+  // };
 
   reInit = () => {
     // cs.log('reInit');
@@ -664,7 +663,11 @@ class OrfOn {
   };
 
   start = async () => {
-    this.dataObject = await this.createDataObject();
+    this.dataObject = [];
+    if (window.location.pathname.match(/video/)) {
+      this.dataObject = await this.createDataObject();
+    }
+
     // cs.log('dataObject', this.dataObject);
     // early exit nothing found
     if (!this.dataObject || !this.dataObject.length) {
@@ -721,9 +724,9 @@ class OrfOn {
       if ('undefined' !== typeof ls.open) {
         this.isOpen = ls.open;
       }
-      if ('undefined' !== typeof ls.posX && 'undefined' !== typeof ls.posY) {
-        this.setPos({ x: ls.posX, y: ls.posY });
-      }
+      // if ('undefined' !== typeof ls.posX && 'undefined' !== typeof ls.posY) {
+      //   this.setPos({ x: ls.posX, y: ls.posY });
+      // }
       if ('undefined' !== typeof ls.activeTab) {
         this.activeTab = +ls.activeTab;
       }
@@ -743,10 +746,6 @@ OrfOn.defaults = {
   createGui: true,
 };
 
-/**
- * init function
- * @return {void} nothing returned
- */
 const init = () => {
   if (window.mediathekPlus_initialized) {
     return false;
@@ -754,15 +753,6 @@ const init = () => {
   window.mediathekPlus_initialized = true;
   new OrfOn();
 };
-
-// let inter = setInterval(() => {
-//   init();
-//   if (window.mediathekPlus_initialized) {
-//     clearInterval(inter);
-//   }
-// }, 10);
-
-// setTimeout(init, 10);
 
 if (window.top === window.self) {
   if (

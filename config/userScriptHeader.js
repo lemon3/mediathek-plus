@@ -12,7 +12,8 @@ const userScriptHeader = `// ==UserScript==
 // @match        https://on.orf.at/*
 // @icon         ${icon}
 // @grant        none
-// @run-at       document-end
+// @run-at       document-idle
+// @noframes
 // @license      ${pkg.license}
 // @copyright    lemon3
 // @homepage     https://github.com/lemon3/mediathek-plus

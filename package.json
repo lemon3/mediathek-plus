@@ -1,7 +1,7 @@
 {
   "name": "mediathek-plus",
   "displayName": "mediathek plus",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "type": "module",
   "description": "mediathek plus is a userscript extension",
   "main": "index.js",
