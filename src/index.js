@@ -682,21 +682,21 @@ class OrfOn {
       this.renderSearchResults(filtered);
       // cs.log(filtered);
 
-      // TODO: optimize ...
-      const orfButtons = document.querySelector('.content .buttons');
-      if (orfButtons) {
-        const newBtn = createEl('button', { class: 'button s-48 tertiary' });
-        // clear event
-        newBtn.addEventListener('click', (evt) => {
-          evt.preventDefault();
-          window.open(filtered[0].link, '_blank');
-        });
+      // TODO:
+      // const orfButtons = document.querySelector('.content .buttons');
+      // if (orfButtons) {
+      //   const newBtn = createEl('button', { class: 'button s-48 tertiary' });
+      //   // clear event
+      //   newBtn.addEventListener('click', (evt) => {
+      //     evt.preventDefault();
+      //     window.open(filtered[0].link, '_blank');
+      //   });
 
-        setTimeout(() => {
-          newBtn.innerHTML = 'Abspielen';
-          orfButtons.append(newBtn);
-        }, 200);
-      }
+      //   setTimeout(() => {
+      //     newBtn.innerHTML = 'Abspielen';
+      //     orfButtons.append(newBtn);
+      //   }, 200);
+      // }
 
       return;
     }
