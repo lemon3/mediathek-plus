@@ -1,4 +1,6 @@
 import css from './style.css?inline';
+// import smiley from './icons/smiley.svg';
+
 import {
   passiveIfSupported,
   createEl,
@@ -746,16 +748,16 @@ OrfOn.defaults = {
  * @return {void} nothing returned
  */
 const init = () => {
-  if (window.orfdl_initialized) {
+  if (window.mediathekPlus_initialized) {
     return false;
   }
-  window.orfdl_initialized = true;
+  window.mediathekPlus_initialized = true;
   new OrfOn();
 };
 
 // let inter = setInterval(() => {
 //   init();
-//   if (window.orfdl_initialized) {
+//   if (window.mediathekPlus_initialized) {
 //     clearInterval(inter);
 //   }
 // }, 10);

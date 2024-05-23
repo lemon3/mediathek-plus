@@ -1,9 +1,9 @@
 {
-  "name": "orfdl",
-  "displayName": "ORF DL",
-  "version": "0.7.2",
+  "name": "mediathek-plus",
+  "displayName": "mediathek plus",
+  "version": "0.8.0",
   "type": "module",
-  "description": "orf tvthek video download helper",
+  "description": "mediathek plus is a userscript extension",
   "main": "index.js",
   "author": "lemon3",
   "license": "MIT",
