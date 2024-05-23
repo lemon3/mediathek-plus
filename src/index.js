@@ -6,11 +6,11 @@ import {
   createEl,
   Store,
   restrict,
-  enableConsole,
+  // enableConsole,
 } from '@/tools.js';
 import pack from '../package.json'; // assert { type: 'json' };
 
-const cs = enableConsole('cs');
+// const cs = enableConsole('cs');
 // window.cs = cs;
 
 // messages
@@ -680,7 +680,7 @@ class OrfOn {
       this.header.classList.add('hidden');
       const filtered = this.dataObject.filter((el) => 'single' === el.type);
       this.renderSearchResults(filtered);
-      cs.log(filtered);
+      // cs.log(filtered);
 
       // TODO: optimize ...
       const orfButtons = document.querySelector('.content .buttons');
