@@ -1,10 +1,14 @@
 # Changelog
 
+## v0.8.2
+### Added or Changed
+- minor fixes
+
 ## v0.8.1
 ### Added or Changed
 - improvements
 - bug fixes
--
+
 ## v0.8.0
 ### Added or Changed
 - name changed

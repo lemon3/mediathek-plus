@@ -56,6 +56,15 @@ const shareButtonClicked = (evt) => {
   const title = t.dataset.shareTitle;
   const url = t.dataset.shareUrl;
 
+  // const video = createEl(
+  //   'video',
+  //   { controls: true},
+  //   { zIndex: 999999999, position: 'absolute', width: '100%', left: 0, top: 0 }
+  // );
+  // video.src = url;
+  // document.body.append(video);
+  // video.play();
+
   navigator
     .share({
       title,
@@ -260,8 +269,11 @@ class OrfOn {
     obj.advertising_query_string = '';
     obj.adition_advertising_query_string = '';
     obj.show_display_ads = false;
-    obj.show_instream_ads = false;
+    obj.has_youth_protection = false;
+    obj.has_active_youth_protection = false;
     obj.youth_protection = undefined;
+    obj.show_instream_ads = false;
+    obj.youth_protection_type = false;
     obj.age_classification = undefined;
     obj.disable_display_ads_orf_platforms = true;
     obj.disable_instream_ads_orf_platforms = true;
