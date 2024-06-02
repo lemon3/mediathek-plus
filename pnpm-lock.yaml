@@ -4,15 +4,13 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-dependencies:
-  globals:
-    specifier: ^15.3.0
-    version: 15.3.0
-
 devDependencies:
   eslint:
     specifier: ^9.3.0
     version: 9.3.0
+  globals:
+    specifier: ^15.3.0
+    version: 15.3.0
   prettier:
     specifier: ^3.2.5
     version: 3.2.5
@@ -754,7 +752,7 @@ packages:
   /globals@15.3.0:
     resolution: {integrity: sha512-cCdyVjIUVTtX8ZsPkq1oCsOsLmGIswqnjZYMJJTGaNApj1yHtLSymKhwH51ttirREn75z3p4k051clwg7rvNKA==}
     engines: {node: '>=18'}
-    dev: false
+    dev: true
 
   /has-flag@4.0.0:
     resolution: {integrity: sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==}

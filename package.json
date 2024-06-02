@@ -11,19 +11,17 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "lint": "eslint 'src/**/*.js' || true",
+    "lint": "eslint 'src/**/*.js'",
     "prettify": "prettier --write 'src/**/*.*'",
     "browserslistupdate": "npx update-browserslist-db@latest"
   },
   "devDependencies": {
     "eslint": "^9.3.0",
+    "globals": "^15.3.0",
     "prettier": "^3.2.5",
     "vite": "^5.2.11",
     "vite-plugin-banner": "^0.7.1",
     "vite-plugin-create-file": "^0.1.0",
     "vite-plugin-string-replace": "^1.1.2"
-  },
-  "dependencies": {
-    "globals": "^15.3.0"
   }
 }
