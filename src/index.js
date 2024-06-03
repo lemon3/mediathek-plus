@@ -1,5 +1,9 @@
 import css from './style.css?inline';
-// import smiley from './icons/smiley.svg';
+
+import menuSvg from './icons/smiley.svg?raw';
+import closeSvg from './icons/close.svg?raw';
+import tabSvg from './icons/tab.svg?raw';
+import shareSvg from './icons/share.svg?raw';
 
 import {
   createEl,
@@ -16,10 +20,10 @@ import pack from '../package.json'; // assert { type: 'json' };
 // messages
 const msg = {
   btn: 'Auf das Bild klicken um den video-link in die Zwischenablage zu kopieren',
-  nothingFound: 'Auf dieser Seite gibt es kein Video!',
+  nothingFound: 'Kein Video gefunden!\n<br> Gehen Sie auf eine Video-Seite!',
   filterVideos: 'Beiträge filtern ...',
-  shareVideo: 'Video Link teilen',
-  openTab: 'Video Link in neuem Tab öffnen',
+  shareVideo: 'Video teilen',
+  openTab: 'Video in neuem Tab öffnen',
   completeBroadcast: 'Ganze Sendung anzeigen',
   individualPosts: 'Einzelne Beiträge anzeigen',
 };
@@ -199,6 +203,11 @@ class OrfOn {
         shareButton.dataset.share = true;
         shareButton.dataset.shareUrl = obj.link;
         shareButton.title = msg.shareVideo;
+        const shareButtonText = createEl(div, { class: 'my-app-button-text' });
+        shareButtonText.innerHTML = msg.shareVideo;
+        const shareButtonIcon = createEl(div, { class: 'my-app-icon' });
+        shareButtonIcon.innerHTML = shareSvg;
+        shareButton.append(shareButtonText, shareButtonIcon);
 
         const newTabButton = createEl('a', {
           class: 'my-app-action my-app-newTab',
@@ -206,6 +215,11 @@ class OrfOn {
         newTabButton.target = '_blank';
         newTabButton.href = obj.link;
         newTabButton.title = msg.openTab;
+        const newTabText = createEl(div, { class: 'my-app-button-text' });
+        newTabText.innerHTML = msg.openTab;
+        const newTabIcon = createEl(div, { class: 'my-app-icon' });
+        newTabIcon.innerHTML = tabSvg;
+        newTabButton.append(newTabText, newTabIcon);
 
         buttons.append(newTabButton, shareButton);
         bar.append(buttons);
@@ -286,8 +300,8 @@ class OrfOn {
   //   x = restrict(x, 0, this.windowWidth - 38);
   //   y = restrict(y, 0, this.windowHeight - 38);
 
-  //   this.closeBtn.style.left = x + 'px';
-  //   this.closeBtn.style.top = y + 'px';
+  //   this.menuBtn.style.left = x + 'px';
+  //   this.menuBtn.style.top = y + 'px';
 
   //   this.x = x;
   //   this.y = y;
@@ -298,11 +312,11 @@ class OrfOn {
   //   document.body.classList.add('dragging');
   //   evt.stopPropagation();
   //   if ('touchstart' === evt.type) {
-  //     this.closeBtn.removeEventListener('mousedown', this.dragStart);
+  //     this.menuBtn.removeEventListener('mousedown', this.dragStart);
   //     window.addEventListener('touchmove', this.drag, passiveIfSupported);
   //     window.addEventListener('touchend', this.dragEnd, false);
   //   } else if ('mousedown' === evt.type) {
-  //     this.closeBtn.removeEventListener('touchstart', this.dragStart);
+  //     this.menuBtn.removeEventListener('touchstart', this.dragStart);
   //     window.addEventListener('mousemove', this.drag, false);
   //     window.addEventListener('mouseup', this.dragEnd, false);
   //   }
@@ -333,7 +347,7 @@ class OrfOn {
     this.mainDiv.style.display = 'block';
     to = setTimeout(() => {
       this.mainDiv.classList.add('open');
-      this.closeBtn.classList.add('open');
+      this.menuBtn.classList.add('open');
       if (this.searchField) {
         this.searchField.focus();
       }
@@ -345,7 +359,7 @@ class OrfOn {
 
   close = () => {
     this.mainDiv.classList.remove('open');
-    this.closeBtn.classList.remove('open');
+    this.menuBtn.classList.remove('open');
     to = setTimeout(() => {
       this.mainDiv.style.display = 'none';
       this.isOpen = false;
@@ -577,9 +591,14 @@ class OrfOn {
       placeholder: msg.filterVideos,
     });
 
-    this.clearBtn = document.createElement(div);
-    this.clearBtn.id = 'my-app-clear';
-    this.clearBtn.innerHTML = 'X';
+    this.clearBtn = createEl(div, {
+      id: 'my-app-clear',
+    });
+    const clearBtnIcon = createEl(div, {
+      class: 'my-app-icon',
+    });
+    clearBtnIcon.innerHTML = closeSvg;
+    this.clearBtn.append(clearBtnIcon);
     this.toggleClearBtn(true);
 
     this.filterElement.append(this.searchField, this.clearBtn);
@@ -589,11 +608,18 @@ class OrfOn {
     this.searchField.addEventListener('input', this.onInput, false);
     this.mainDiv.append(this.header);
 
-    this.closeBtn = createEl(div, { id: 'my-app-close' });
-    this.closeBtn.addEventListener('click', this.toggle);
+    this.menuBtn = createEl(div, { id: 'my-app-menu' });
+    const closeIcon = createEl(div, { class: 'open' });
+    closeIcon.innerHTML = closeSvg;
+    const menuIcon = createEl(div, { class: 'close' });
+    menuIcon.innerHTML = menuSvg;
 
-    // this.closeBtn.addEventListener('mousedown', this.dragStart);
-    // this.closeBtn.addEventListener(
+    this.menuBtn.append(closeIcon, menuIcon);
+
+    this.menuBtn.addEventListener('click', this.toggle);
+
+    // this.menuBtn.addEventListener('mousedown', this.dragStart);
+    // this.menuBtn.addEventListener(
     //   'touchstart',
     //   this.dragStart,
     //   passiveIfSupported
@@ -610,7 +636,7 @@ class OrfOn {
     app.append(this.mainDiv);
     const style = createEl('style');
     style.innerHTML = styleText;
-    document.body.append(style, app, this.closeBtn);
+    document.body.append(style, app, this.menuBtn);
 
     // event listener
     app.addEventListener('click', this.contentClicked);
@@ -749,7 +775,7 @@ class OrfOn {
     if (this.isOpen) {
       this.mainDiv.classList.add('open');
       this.mainDiv.style.display = 'block';
-      this.closeBtn.classList.add('open');
+      this.menuBtn.classList.add('open');
     }
   }
 }
