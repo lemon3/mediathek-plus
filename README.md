@@ -38,7 +38,6 @@ A small helper to get the source for a given video from on.orf.at.
 
 ![demo](https://raw.githubusercontent.com/lemon3/mediathek-plus/main/_assets/demo.gif)
 
-
 **Note:** this (user-)script **DOESN'T** download files!
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
