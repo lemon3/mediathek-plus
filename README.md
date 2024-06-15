@@ -10,7 +10,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/lemon3/mediathek-plus">
-    <img src="https://raw.githubusercontent.com/lemon3/mediathek-plus/main/_assets/dl.svg" alt="Logo" width="140" height="auto">
+    <img src="https://raw.githubusercontent.com/lemon3/mediathek-plus/main/_assets/icon.svg" alt="Logo" width="140" height="auto">
   </a>
   <h3 align="center">mediathek-plus</h3>
 </div>
