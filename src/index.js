@@ -102,6 +102,7 @@ class OrfOn {
 
     this.currentSite = window.location.href;
     this.createWatcher();
+
     if (this.settings.createGui) {
       this.createApp();
     }
@@ -368,7 +369,7 @@ class OrfOn {
     }, 100);
   };
 
-  toggle = () => {
+  toggleOpen = () => {
     if (this.moved) {
       return false;
     }
@@ -576,6 +577,7 @@ class OrfOn {
     this.buttons = createEl(div, { class: 'my-app-buttons' });
 
     this.buttons.append(this.showAllButton, this.showSegmentsButton);
+
     this.header.append(this.buttons);
 
     this.filterElement = createEl(div, { id: 'my-app-filter' });
@@ -602,10 +604,11 @@ class OrfOn {
     this.toggleClearBtn(true);
 
     this.filterElement.append(this.searchField, this.clearBtn);
-    this.header.append(this.filterElement);
 
     this.clearBtn.addEventListener('click', this.clear, false);
     this.searchField.addEventListener('input', this.onInput, false);
+
+    this.header.append(this.filterElement);
     this.mainDiv.append(this.header);
 
     this.menuBtn = createEl(div, { id: 'my-app-menu' });
@@ -616,7 +619,7 @@ class OrfOn {
 
     this.menuBtn.append(closeIcon, menuIcon);
 
-    this.menuBtn.addEventListener('click', this.toggle);
+    this.menuBtn.addEventListener('click', this.toggleOpen);
 
     // this.menuBtn.addEventListener('mousedown', this.dragStart);
     // this.menuBtn.addEventListener(
@@ -710,7 +713,7 @@ class OrfOn {
     // early exit nothing found
     if (!this.dataObject || !this.dataObject.length) {
       // cs.log('exit');
-      this.header.classList.add('hidden');
+      this.header.classList.add('single');
       this.contentDiv.innerHTML = `<div class="my-app-result" style="text-align:center;">${msg.nothingFound}</div>`;
       return;
     }
@@ -718,7 +721,7 @@ class OrfOn {
     const singleVideoPage = this.dataObject && this.dataObject.length === 2;
 
     if (singleVideoPage) {
-      this.header.classList.add('hidden');
+      this.header.classList.add('single');
       const filtered = this.dataObject.filter((el) => 'single' === el.type);
       this.renderSearchResults(filtered);
       // cs.log(filtered);
@@ -742,7 +745,7 @@ class OrfOn {
       return;
     }
 
-    this.header.classList.remove('hidden');
+    this.header.classList.remove('single');
     this.searchField.value = this.autoSearch;
 
     if (1 === this.activeTab) this.showAll();

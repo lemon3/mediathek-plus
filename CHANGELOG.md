@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.8.4
+### Added or Changed
+- added a close button to the main content window
+
 ## v0.8.3
 ### Added or Changed
 - minor fixes

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         mediathek plus
 // @namespace    https://github.com/lemon3/
-// @version      0.8.3
+// @version      0.8.4
 // @description  mediathek plus is a userscript extension
 // @author       lemon3
 // @match        https://on.orf.at/*

@@ -54,10 +54,15 @@ export default defineConfig({
     ]),
     Writer([
       {
-        outDir: './dist',
-        content: userScriptHeader,
-        filename: pkg.name + '.meta.js', // required
+        // outDir: './dist',
+        content: () => userScriptHeader,
+        filename: pkg.name + '.meta.js',
       },
+      // {
+      //   outDir: './dist',
+      //   content: userScriptHeader,
+      //   filename: pkg.name + '.meta2.js',
+      // },
     ]),
   ],
 });

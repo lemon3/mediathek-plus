@@ -12,6 +12,7 @@
   --color-5: #222222;
   --color-6: #555555;
   --color-7: #aedaf5;
+  --color-8: #ffffff14;
   --font-small: 12px;
   --font-tiny: 10px;
 }
@@ -36,33 +37,34 @@
 }
 
 #my-app-clear {
-  background-color: var(--color-3);
+  /* background-color: var(--color-3); */
   width: 32px;
   height: 32px;
   cursor: pointer;
   right: 3px;
   top: 3px;
-  border-radius: 50%;
+  /* border-radius: 50%; */
   position: absolute;
   display: flex;
   padding: 5px;
 }
 
 #my-app-clear svg {
-  fill: var(--color-2);
+  fill: var(--color-6);
 }
 
 #my-app-header {
   width: 100%;
   padding: 15px;
 }
-#my-app-header.hidden {
-  display: none;
-}
 .my-app-buttons {
   display: flex;
   font-size: 14px;
   gap: 0.5em;
+}
+
+#my-app-header.single {
+  display: none !important;
 }
 
 .my-app-button {
