@@ -15,6 +15,8 @@
   <h3 align="center">mediathek-plus</h3>
 </div>
 
+**[>> DOWNLOAD USERSCRIPT FILE <<](https://raw.githubusercontent.com/lemon3/mediathek-plus/main/dist/mediathek-plus.user.js)**
+
 <!-- TABLE OF CONTENTS -->
 <details>
   <summary>Table of Contents</summary>
